@@ -2,9 +2,6 @@
 package org.usfirst.frc.team2415.robot;
 
 import org.usfirst.frc.team2415.robot.subsystems.*;
-import org.usfirst.frc.team2415.robot.commands.general.RunSystemsCommand;
-import org.usfirst.frc.team2415.robot.commands.launcher.*;
-import org.usfirst.frc.team2415.robot.subsystems.LauncherSubsystem.Solenoids;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -24,7 +21,6 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 	public static DriveSubsystem driveSubystem;
-	public static LauncherSubsystem launcherSubsystem;
 	
 	public static WiredCatGamepad gamepad;
 	
