@@ -28,7 +28,7 @@ public class ArcadeDriveCommand extends Command {
     	double left = leftY + rightX;
     	double right =  leftY - rightX;
     	
-    	Robot.driveSubystem.setMotors(left, -right);
+    	//Robot.driveSubystem.setMotors(left, -right);
     }
 
     // Make this return true when this Command no longer needs to run execute()

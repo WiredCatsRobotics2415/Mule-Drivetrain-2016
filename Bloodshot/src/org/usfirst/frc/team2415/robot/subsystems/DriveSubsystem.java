@@ -4,7 +4,7 @@ import org.usfirst.frc.team2415.robot.RobotMap;
 import org.usfirst.frc.team2415.robot.commands.drive.ArcadeDriveCommand;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.CANTalon;
 
 /**
  *
@@ -15,11 +15,13 @@ public class DriveSubsystem extends Subsystem {
     // here. Call these from Commands.
 	
 	
-	Talon leftTal, rightTal;
+	public CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
 	
 	public DriveSubsystem(){
-		leftTal = new Talon(RobotMap.LEFT_TALONS);
-		rightTal = new Talon(RobotMap.RIGHT_TALONS);
+		leftTalOne = new CANTalon(RobotMap.LEFT_TALON_ZERO);
+		leftTalTwo = new CANTalon(RobotMap.LEFT_TALON_ONE);
+		rightTalOne = new CANTalon(RobotMap.RIGHT_TALON_ZERO);
+		rightTalTwo = new CANTalon(RobotMap.RIGHT_TALON_ONE);
 	}
 	
     public void initDefaultCommand() {
@@ -27,21 +29,25 @@ public class DriveSubsystem extends Subsystem {
     }
     
     public void stop(){
-    	leftTal.set(0);
-    	rightTal.set(0);
+    	leftTalOne.set(0);
+    	leftTalTwo.set(0);
+    	rightTalOne.set(0);
+    	rightTalTwo.set(0);
     }
-    
+    /*
     public void setMotors(double left, double right){
-    	leftTal.set(left);
-    	rightTal.set(right);
+    	leftTalOne.set(left);
+    	leftTalTwo.set(left);
+    	rightTalOne.set(right);
+    	rightTalTwo.set(right);
     }
-    
+    */
     public double getLeftTal(){
-    	return leftTal.get();
+    	return leftTalOne.get();
     }
     
     public double getRightTal(){
-    	return rightTal.get();
+    	return rightTalOne.get();
     }
 }
 

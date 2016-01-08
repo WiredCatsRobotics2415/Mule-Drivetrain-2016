@@ -1,13 +1,15 @@
 
 package org.usfirst.frc.team2415.robot;
 
-import org.usfirst.frc.team2415.robot.subsystems.*;
+import org.usfirst.frc.team2415.robot.commands.TurnMotorOneTest;
+import org.usfirst.frc.team2415.robot.commands.TurnMotorTwoTest;
+import org.usfirst.frc.team2415.robot.commands.TurnMotorThreeTest;
+import org.usfirst.frc.team2415.robot.commands.TurnMotorFourTest;
+import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +26,7 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
-	private Compressor compressor;
+	//private Compressor compressor;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -33,13 +35,19 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 		oi = new OI();
 		
-		//gamepad = new WiredCatGamepad(0);
+		gamepad = new WiredCatGamepad(0);
 		/*
 		compressor = new Compressor(RobotMap.PCM_ID);
 		//Testing testing 123
 		SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
 		*/
 		driveSubystem = new DriveSubsystem();
+		
+		gamepad.a_button.whileHeld(new TurnMotorOneTest());
+		gamepad.b_button.whileHeld(new TurnMotorTwoTest());
+		gamepad.x_button.whileHeld(new TurnMotorThreeTest());
+		gamepad.y_button.whileHeld(new TurnMotorFourTest());
+		
 		//launcherSubsystem = new LauncherSubsystem();
 		/*
 		gamepad.rightTrigger.whenPressed(new FireCommand(Solenoids.ALL_FIRE));
@@ -63,8 +71,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Fire Bottom Left Cannon", new FireCommand(Solenoids.BOT_LEFT_FIRE));
 		*/
 		//Speed Gauges
-		SmartDashboard.putNumber("Left Speed", Robot.driveSubystem.getLeftTal());
-		SmartDashboard.putNumber("Right Speed", -Robot.driveSubystem.getLeftTal());
+//		SmartDashboard.putNumber("Left Speed", Robot.driveSubystem.getLeftTal());
+//		SmartDashboard.putNumber("Right Speed", -Robot.driveSubystem.getLeftTal());
     }
 	
 	public void disabledPeriodic() {
