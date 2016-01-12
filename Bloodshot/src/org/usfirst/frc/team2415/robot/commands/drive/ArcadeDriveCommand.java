@@ -1,8 +1,8 @@
 package org.usfirst.frc.team2415.robot.commands.drive;
 
 import org.usfirst.frc.team2415.robot.Robot;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -25,10 +25,17 @@ public class ArcadeDriveCommand extends Command {
     	double leftY = -Robot.gamepad.leftY();
     	double rightX = Robot.gamepad.rightX();
     	
-    	double left = leftY + rightX;
-    	double right =  leftY - rightX;
+    	double left = leftY - rightX;
+    	double right =  leftY + rightX;
     	
-    	//Robot.driveSubystem.setMotors(left, -right);
+    	Robot.driveSubystem.setMotors(-left, right);
+
+		SmartDashboard.putNumber("Left Encoder", -Robot.driveSubystem.getLeftEncoder());
+		SmartDashboard.putNumber("Right Encoder", Robot.driveSubystem.getRightEncoder());
+		
+		SmartDashboard.putNumber("Yaw", Robot.driveSubystem.getYaw());
+		SmartDashboard.putNumber("Pitch", Robot.driveSubystem.getPitch());
+		SmartDashboard.putNumber("Roll", Robot.driveSubystem.getRoll());
     }
 
     // Make this return true when this Command no longer needs to run execute()

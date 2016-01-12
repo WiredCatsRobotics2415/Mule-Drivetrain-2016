@@ -1,15 +1,14 @@
 
 package org.usfirst.frc.team2415.robot;
 
-import org.usfirst.frc.team2415.robot.commands.TurnMotorOneTest;
-import org.usfirst.frc.team2415.robot.commands.TurnMotorTwoTest;
-import org.usfirst.frc.team2415.robot.commands.TurnMotorThreeTest;
-import org.usfirst.frc.team2415.robot.commands.TurnMotorFourTest;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
+
+import com.kauailabs.nav6.frc.IMU;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +24,8 @@ public class Robot extends IterativeRobot {
 	public static DriveSubsystem driveSubystem;
 	
 	public static WiredCatGamepad gamepad;
+	
+	private IMU imu;
 	
 	//private Compressor compressor;
 
@@ -43,36 +44,6 @@ public class Robot extends IterativeRobot {
 		*/
 		driveSubystem = new DriveSubsystem();
 		
-		gamepad.a_button.whileHeld(new TurnMotorOneTest());
-		gamepad.b_button.whileHeld(new TurnMotorTwoTest());
-		gamepad.x_button.whileHeld(new TurnMotorThreeTest());
-		gamepad.y_button.whileHeld(new TurnMotorFourTest());
-		
-		//launcherSubsystem = new LauncherSubsystem();
-		/*
-		gamepad.rightTrigger.whenPressed(new FireCommand(Solenoids.ALL_FIRE));
-		gamepad.a_button.whenPressed(new FireCommand(Solenoids.BOT_RIGHT_FIRE));
-		gamepad.b_button.whenPressed(new FireCommand(Solenoids.TOP_RIGHT_FIRE));
-		gamepad.x_button.whenPressed(new FireCommand(Solenoids.BOT_LEFT_FIRE));
-		gamepad.y_button.whenPressed(new FireCommand(Solenoids.TOP_LEFT_FIRE));
-		
-		//Displays which commands are being run
-		SmartDashboard.putData(Scheduler.getInstance());
-		
-		//Displays the status of the Launcher Subsystem
-		SmartDashboard.putData(launcherSubsystem);
-		
-		//Buttons to fire all of the cannons and run systems
-		SmartDashboard.putData("Run Systems", new RunSystemsCommand());
-		SmartDashboard.putData("Fire All The Cannons", new FireCommand(Solenoids.ALL_FIRE));
-		SmartDashboard.putData("Fire Top Right Cannon", new FireCommand(Solenoids.TOP_RIGHT_FIRE));
-		SmartDashboard.putData("Fire Top Left Cannon", new FireCommand(Solenoids.TOP_LEFT_FIRE));
-		SmartDashboard.putData("Fire Bottom Right Cannon", new FireCommand(Solenoids.BOT_RIGHT_FIRE));
-		SmartDashboard.putData("Fire Bottom Left Cannon", new FireCommand(Solenoids.BOT_LEFT_FIRE));
-		*/
-		//Speed Gauges
-//		SmartDashboard.putNumber("Left Speed", Robot.driveSubystem.getLeftTal());
-//		SmartDashboard.putNumber("Right Speed", -Robot.driveSubystem.getLeftTal());
     }
 	
 	public void disabledPeriodic() {
@@ -95,6 +66,9 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
+    	
+    	
+    	
     }
 
     /**
@@ -110,6 +84,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        
+        System.out.println(Robot.driveSubystem.getRightEncoder());
     }
     
     /**
