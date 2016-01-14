@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team2415.robot.commands.drive.GyroAutonomousTestCommand;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -24,6 +26,8 @@ public class Robot extends IterativeRobot {
 	public static DriveSubsystem driveSubsystem;
 	
 	public static WiredCatGamepad gamepad;
+	
+	private GyroAutonomousTestCommand gyroTest;
 	
 	private IMU imu;
 	
@@ -44,6 +48,8 @@ public class Robot extends IterativeRobot {
 		*/
 		driveSubsystem = new DriveSubsystem();
 		
+		gyroTest = new GyroAutonomousTestCommand();
+		
     }
 	
 	public void disabledPeriodic() {
@@ -52,6 +58,7 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
+    	gyroTest.start();
     }
 
     /**
@@ -59,6 +66,7 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
+        
     }
 
     public void teleopInit() {
