@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
 
 	public static OI oi;
 	
-	public static DriveSubsystem driveSubystem;
+	public static DriveSubsystem driveSubsystem;
 	
 	public static WiredCatGamepad gamepad;
 	
@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 		//Testing testing 123
 		SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
 		*/
-		driveSubystem = new DriveSubsystem();
+		driveSubsystem = new DriveSubsystem();
 		
     }
 	
@@ -85,7 +85,8 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
         
-        System.out.println(Robot.driveSubystem.getRightEncoder());
+        System.out.println(Robot.driveSubsystem.getLeftEncoder() +
+        		", " + Robot.driveSubsystem.getRightEncoder());
     }
     
     /**

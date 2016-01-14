@@ -76,12 +76,12 @@ public class DriveSubsystem extends Subsystem {
     }
     
     public double getRightEncoder(){
-    	return rightEncoder.getDistance();
+    	return rightEncoder.get();
     }
     
    
     public double getLeftEncoder(){
-    	return leftEncoder.getDistance();
+    	return leftEncoder.get();
     }
     
     public void resetEncoders(){
@@ -90,15 +90,15 @@ public class DriveSubsystem extends Subsystem {
     }
     
     public double getYaw(){
-    	return -imu.getRoll();
+    	return imu.getYaw();
     }
     
     public double getPitch(){
-    	return imu.getPitch()+90;
+    	return imu.getPitch();
     }
     
     public double getRoll(){
-    	return imu.getYaw();
+    	return imu.getRoll();
     }
 }
 

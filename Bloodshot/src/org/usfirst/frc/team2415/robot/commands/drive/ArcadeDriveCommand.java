@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.command.Command;
 public class ArcadeDriveCommand extends Command {
 
     public ArcadeDriveCommand() {
-        requires(Robot.driveSubystem);
+        requires(Robot.driveSubsystem);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.driveSubystem.stop();
+    	Robot.driveSubsystem.stop();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -28,14 +28,14 @@ public class ArcadeDriveCommand extends Command {
     	double left = leftY - rightX;
     	double right =  leftY + rightX;
     	
-    	Robot.driveSubystem.setMotors(-left, right);
+    	Robot.driveSubsystem.setMotors(-left, right);
 
-		SmartDashboard.putNumber("Left Encoder", -Robot.driveSubystem.getLeftEncoder());
-		SmartDashboard.putNumber("Right Encoder", Robot.driveSubystem.getRightEncoder());
+		SmartDashboard.putNumber("Left Encoder", -Robot.driveSubsystem.getLeftEncoder());
+		SmartDashboard.putNumber("Right Encoder", Robot.driveSubsystem.getRightEncoder());
 		
-		SmartDashboard.putNumber("Yaw", Robot.driveSubystem.getYaw());
-		SmartDashboard.putNumber("Pitch", Robot.driveSubystem.getPitch());
-		SmartDashboard.putNumber("Roll", Robot.driveSubystem.getRoll());
+		SmartDashboard.putNumber("Yaw", Robot.driveSubsystem.getYaw());
+		SmartDashboard.putNumber("Pitch", Robot.driveSubsystem.getPitch());
+		SmartDashboard.putNumber("Roll", Robot.driveSubsystem.getRoll());
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -45,12 +45,12 @@ public class ArcadeDriveCommand extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.driveSubystem.stop();
+    	Robot.driveSubsystem.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.driveSubystem.stop();
+    	Robot.driveSubsystem.stop();
     }
 }

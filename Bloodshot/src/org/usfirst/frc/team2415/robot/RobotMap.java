@@ -11,8 +11,8 @@ public class RobotMap {
     public static final int RIGHT_TALON_ZERO = 0;
     public static final int RIGHT_TALON_ONE = 3;
     
-    public static final int[] RIGHT_ENCODER = {2,3};
-    public static final int[] LEFT_ENCODER = {0,1};
+    public static final int[] RIGHT_ENCODER = {0,1};
+    public static final int[] LEFT_ENCODER = {2,3};
     
     public static final int PCM_ID = 20;
     
