@@ -1,7 +1,7 @@
 package org.usfirst.frc.team2415.robot.subsystems;
 
 import org.usfirst.frc.team2415.robot.RobotMap;
-import org.usfirst.frc.team2415.robot.commands.drive.ArcadeDriveCommand;
+import org.usfirst.frc.team2415.robot.commands.ArcadeDriveCommand;
 
 import com.kauailabs.nav6.frc.IMU;
 

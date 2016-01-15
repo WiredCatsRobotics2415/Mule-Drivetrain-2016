@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team2415.robot;
 
+import org.usfirst.frc.team2415.robot.commands.GyroAutonomousTestCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
 
 import com.kauailabs.nav6.frc.IMU;
@@ -8,9 +9,6 @@ import com.kauailabs.nav6.frc.IMU;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.usfirst.frc.team2415.robot.commands.drive.GyroAutonomousTestCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the
