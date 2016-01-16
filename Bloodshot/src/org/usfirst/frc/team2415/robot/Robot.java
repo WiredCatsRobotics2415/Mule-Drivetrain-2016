@@ -1,9 +1,11 @@
 
 package org.usfirst.frc.team2415.robot;
 
+import org.usfirst.frc.team2415.robot.commands.AutoStraightDriveCommand;
 import org.usfirst.frc.team2415.robot.commands.GyroAutonomousTestCommand;
+import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
+import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
-import org.usfirst.frc.team2415.robot.resetcommands.*;
 
 import com.kauailabs.nav6.frc.IMU;
 
@@ -54,7 +56,7 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putData("Reset Encoders", new ResetEncodersCommand());
 		SmartDashboard.putData("Reset Yaw", new ResetYawCommand());
-		
+		SmartDashboard.putData("Drive Straight This Amount", new AutoStraightDriveCommand((float)(SmartDashboard.getNumber("Straight Drive Distance", 2))));
 		
     }
 	

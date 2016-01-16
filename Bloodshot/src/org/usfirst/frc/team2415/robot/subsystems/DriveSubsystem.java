@@ -1,5 +1,6 @@
 package org.usfirst.frc.team2415.robot.subsystems;
 
+import org.usfirst.frc.team2415.robot.PID;
 import org.usfirst.frc.team2415.robot.RobotMap;
 import org.usfirst.frc.team2415.robot.commands.ArcadeDriveCommand;
 
@@ -29,6 +30,8 @@ public class DriveSubsystem extends Subsystem {
 	private CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
 	private Encoder rightEncoder, leftEncoder;
 	private IMU imu;
+
+	public PID rotationalPID = new PID(0.6f, 2f, 0.125f);
 	
 	
 	
