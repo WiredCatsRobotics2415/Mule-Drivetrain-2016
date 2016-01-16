@@ -3,12 +3,14 @@ package org.usfirst.frc.team2415.robot;
 
 import org.usfirst.frc.team2415.robot.commands.GyroAutonomousTestCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
+import org.usfirst.frc.team2415.robot.resetcommands.*;
 
 import com.kauailabs.nav6.frc.IMU;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -48,10 +50,17 @@ public class Robot extends IterativeRobot {
 		
 		gyroTest = new GyroAutonomousTestCommand();
 		
+		SmartDashboard.putData(Scheduler.getInstance());
+		
+		SmartDashboard.putData("Reset Encoders", new ResetEncodersCommand());
+		SmartDashboard.putData("Reset Yaw", new ResetYawCommand());
+		
+		
     }
 	
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
+		updateStatus();
 	}
 
     public void autonomousInit() {
@@ -90,9 +99,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        updateStatus();
         
-        System.out.println(Robot.driveSubsystem.getLeftEncoder() +
-        		", " + Robot.driveSubsystem.getRightEncoder());
     }
     
     /**
@@ -100,5 +108,9 @@ public class Robot extends IterativeRobot {
      */
     public void testPeriodic() {
         LiveWindow.run();
+    }
+    
+    public void updateStatus() {
+    	Robot.driveSubsystem.updateStatus();
     }
 }

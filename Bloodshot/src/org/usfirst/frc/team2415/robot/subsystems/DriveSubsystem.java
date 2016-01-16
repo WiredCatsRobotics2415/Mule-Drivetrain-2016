@@ -7,8 +7,10 @@ import com.kauailabs.nav6.frc.IMU;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -27,6 +29,8 @@ public class DriveSubsystem extends Subsystem {
 	private CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
 	private Encoder rightEncoder, leftEncoder;
 	private IMU imu;
+	
+	
 	
 	public DriveSubsystem(){
 		leftTalOne = new CANTalon(RobotMap.LEFT_TALON_ZERO);
@@ -76,12 +80,12 @@ public class DriveSubsystem extends Subsystem {
     }
     
     public double getRightEncoder(){
-    	return rightEncoder.get();
+    	return rightEncoder.getDistance();
     }
     
    
     public double getLeftEncoder(){
-    	return leftEncoder.get();
+    	return leftEncoder.getDistance();
     }
     
     public void resetEncoders(){
@@ -100,5 +104,18 @@ public class DriveSubsystem extends Subsystem {
     public double getRoll(){
     	return imu.getRoll();
     }
+    
+    public void resetYaw(){
+    	imu.zeroYaw();
+    }
+
+	public void updateStatus() {
+		SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
+		SmartDashboard.putNumber("Right Encoder", getRightEncoder());
+		SmartDashboard.putNumber("Yaw", getYaw());
+		SmartDashboard.putNumber("Right Talon", getRightTal());
+		SmartDashboard.putNumber("Left Talon", getLeftTal());
+		
+	}
 }
 
