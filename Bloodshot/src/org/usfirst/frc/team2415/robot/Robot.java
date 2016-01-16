@@ -47,8 +47,10 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
 		*/
 		driveSubsystem = new DriveSubsystem();
+//		
+//		gyroTest = new GyroAutonomousTestCommand();
 		
-		gyroTest = new GyroAutonomousTestCommand();
+		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand());
 		
 		SmartDashboard.putData(Scheduler.getInstance());
 		
@@ -65,7 +67,6 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-    	gyroTest.start();
     }
 
     /**
