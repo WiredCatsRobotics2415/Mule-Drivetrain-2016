@@ -83,7 +83,7 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
     	
-    	
+    	driveSubsystem.resetYaw();
     	
     }
 
@@ -100,7 +100,8 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        updateStatus();
+        //updateStatus();
+      //  System.out.println(driveSubsystem.getYaw());
         
     }
     
@@ -112,6 +113,6 @@ public class Robot extends IterativeRobot {
     }
     
     public void updateStatus() {
-    	Robot.driveSubsystem.updateStatus();
+    	//Robot.driveSubsystem.updateStatus();
     }
 }
