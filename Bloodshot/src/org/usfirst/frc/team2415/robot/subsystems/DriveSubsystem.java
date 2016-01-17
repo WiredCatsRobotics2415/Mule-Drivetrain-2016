@@ -31,7 +31,7 @@ public class DriveSubsystem extends Subsystem {
 	private Encoder rightEncoder, leftEncoder;
 	private IMU imu;
 
-	public PID rotationalPID = new PID(0.6f, 2f, 0.125f);
+	public PID rotationalPID = new PID(1f, 0.0001f, 0f);
 	
 	
 	

@@ -21,7 +21,7 @@ public class AutoTurnCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	System.out.println("Initialize phase 1: buttfuck");
+    	System.out.println("Initialize phase 1: Turn");
     	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.resetYaw();
     }
