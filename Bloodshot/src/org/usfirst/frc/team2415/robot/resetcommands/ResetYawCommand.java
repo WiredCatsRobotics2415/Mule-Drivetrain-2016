@@ -5,7 +5,7 @@ import org.usfirst.frc.team2415.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ *	Use this command for resetting the yaw 0 mark of IMU (via controller/SmartDashboard). Recommended use for testing.
  */
 public class ResetYawCommand extends Command {
 

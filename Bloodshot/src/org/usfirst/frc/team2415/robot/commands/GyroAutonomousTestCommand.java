@@ -7,21 +7,22 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
+ * <p>Autonomous Command used for correctly centering the robot along a dersired degree of yaw rotation</p>
+ * <p>Currently WIP</p>
  *
  */
 public class GyroAutonomousTestCommand extends Command {
 	
-	private double desiredYaw;
+	private double desiredYaw, lastError, elapsedTime, intCumulative;
+	
 	private long startingTime;
 	private double p, i, d;
 	private boolean isDone = false;
-	private double lastError;
-	private double elapsedTime;
-	private double intCumulative;
-
-    public GyroAutonomousTestCommand() {
+	
+	
+    public GyroAutonomousTestCommand(double desiredYaw) {
         requires(Robot.driveSubsystem);
-        desiredYaw = 0;
+        this.desiredYaw = desiredYaw;
         startingTime = System.currentTimeMillis();
         lastError = 0;
         p = .001;
@@ -36,9 +37,11 @@ public class GyroAutonomousTestCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	elapsedTime = (System.currentTimeMillis() - startingTime)/1000.0;
+    	long time = System.currentTimeMillis();
+    	double currYaw = Robot.driveSubsystem.getYaw();
+    	elapsedTime = (time - startingTime)/1000.0;
     	
-    	double error = desiredYaw - Robot.driveSubsystem.getYaw();
+    	double error = desiredYaw - currYaw;
     	//if(error > 180) error -= 360;
     	//else if(error < -180) error += 360;
     	
@@ -47,32 +50,25 @@ public class GyroAutonomousTestCommand extends Command {
     	Robot.driveSubsystem.setMotors(pid, pid);
     	lastError = error;
     	
-    	startingTime = System.currentTimeMillis();
-    	
-    	if (desiredYaw == Robot.driveSubsystem.getYaw()) isDone = true;
+    	startingTime = time;
+    	if (currYaw == desiredYaw) isDone = true;
 
     }
     
     private double proportional(double error) {
-    	double proportional = p * error;
-    	return proportional;
+    	return p * error;
     }
     
     private double integral(double error) {
     	
     	if(lastError == 0) return 0;
     	intCumulative += .5*(error + lastError)*elapsedTime;
-    	double integral = i*intCumulative;
-    	return integral;
+    	return i*intCumulative;
     }
     
     private double derivative(double error) {
-    	
     	if(lastError == 0) return 0;
-    	
-    	double derivative = d * ((error-lastError)/elapsedTime);
-    	
-    	return derivative;
+    	return d * ((error-lastError)/elapsedTime);
     }
 
     // Make this return true when this Command no longer needs to run execute()

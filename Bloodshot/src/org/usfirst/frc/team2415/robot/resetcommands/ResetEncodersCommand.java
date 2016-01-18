@@ -5,7 +5,7 @@ import org.usfirst.frc.team2415.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ *	Use this command for resetting encoders (via controller/SmartDashboard). Recommended use for testing.
  */
 public class ResetEncodersCommand extends Command {
 
@@ -24,7 +24,7 @@ public class ResetEncodersCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
