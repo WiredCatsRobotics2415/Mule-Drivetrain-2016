@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.usfirst.frc.team2415.robot.PID;
 import org.usfirst.frc.team2415.robot.Robot;
+import org.usfirst.frc.team2415.robot.WriteToFlashDrive;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -16,8 +17,10 @@ import edu.wpi.first.wpilibj.command.Command;
 public class AutoStraightDriveCommand extends Command {
 
 	private PID rotationalPID;
+	private PID yawPID;
 	private float desiredDistance;
-	private BufferedWriter writer;
+	private BufferedWriter lengthWriter;
+	private BufferedWriter yawWriter;
 	
 	
 	
@@ -29,6 +32,7 @@ public class AutoStraightDriveCommand extends Command {
         requires(Robot.driveSubsystem);
         this.desiredDistance = desiredDistance;
         this.rotationalPID = Robot.driveSubsystem.rotationalPID;
+        this.yawPID = Robot.driveSubsystem.yawPID;
         
         
     }
@@ -39,37 +43,23 @@ public class AutoStraightDriveCommand extends Command {
     	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.resetYaw();
     	
-    	try {
-    		writer = new BufferedWriter(new FileWriter(new File("/V/data2415.csv")));
-    	} catch (IOException e) {
-    		try {
-    			writer = new BufferedWriter(new FileWriter(new File("/U/data2415.csv")));
-    		} catch (IOException f) {
-    			f.printStackTrace();
-    		}
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
-    	}
+    	Robot.writeToFlashDrive.createBufferedWriter("lengthData", lengthWriter);
+    	Robot.writeToFlashDrive.createBufferedWriter("YawData", yawWriter);
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	double speed = rotationalPID.getPIDOutput(Robot.driveSubsystem.getLeftEncoder(), desiredDistance);
-    	double rotation = rotationalPID.getPIDOutput(Robot.driveSubsystem.getYaw(), 0);
+    	double rotation = yawPID.getPIDOutput(Robot.driveSubsystem.getYaw(), 0);
     	if (speed > .90) speed = .90;
     	if (speed < -.90) speed = -.90;
     	double left = speed - rotation;
     	double right = speed + rotation;
     	Robot.driveSubsystem.setMotors(left, -right);
     	
-    	try {
-    		System.out.println(writer);
-			writer.write(Robot.driveSubsystem.getRightEncoder() + ",");
-			writer.write(this.desiredDistance + "\n");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	Robot.writeToFlashDrive.writeToFile(Robot.driveSubsystem.getLeftEncoder(), desiredDistance, lengthWriter);
+    	Robot.writeToFlashDrive.writeToFile(Robot.driveSubsystem.getYaw(), 0, yawWriter);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -82,27 +72,17 @@ public class AutoStraightDriveCommand extends Command {
     protected void end() {
     	Robot.driveSubsystem.setMotors(0, 0);
     	System.out.println("Fire.");	
-    	try {
-    		System.out.println("I am about to flush the toilet");
-			writer.flush();
-			writer.close();
-			System.out.println("The dookie is down the drain");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	
+    	Robot.writeToFlashDrive.flushAndClose(lengthWriter);
+    	Robot.writeToFlashDrive.flushAndClose(yawWriter);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.driveSubsystem.setMotors(0, 0);
-    	try {
-    		System.out.println("I am about to flush the toilet");
-			writer.flush();
-			writer.close();
-			System.out.println("The dookie is down the drain");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	Robot.driveSubsystem.setMotors(0, 0);	
+    	
+    	Robot.writeToFlashDrive.flushAndClose(lengthWriter);
+    	Robot.writeToFlashDrive.flushAndClose(yawWriter);
     }
 }

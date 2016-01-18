@@ -1,5 +1,7 @@
 package org.usfirst.frc.team2415.robot.commands;
 
+import java.io.BufferedWriter;
+
 import org.usfirst.frc.team2415.robot.PID;
 import org.usfirst.frc.team2415.robot.Robot;
 
@@ -11,11 +13,13 @@ import edu.wpi.first.wpilibj.command.Command;
 public class AutoTurnCommand extends Command {
 	
 	private float amount_turn_in_degrees;
-	private PID rotationalPID;
+	private PID yawPID;
+	private BufferedWriter autoTurnWriter;
 
     public AutoTurnCommand(float turn) {
         requires(Robot.driveSubsystem);
-        rotationalPID = Robot.driveSubsystem.rotationalPID;
+        yawPID = Robot.driveSubsystem.yawPID;
+        this.amount_turn_in_degrees = turn;
         
     }
 
@@ -24,14 +28,18 @@ public class AutoTurnCommand extends Command {
     	System.out.println("Initialize phase 1: Turn");
     	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.resetYaw();
+    	
+    	Robot.writeToFlashDrive.createBufferedWriter("autoTurnData", autoTurnWriter);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double rotation = rotationalPID.getPIDOutput(Robot.driveSubsystem.getYaw(), this.amount_turn_in_degrees);
+    	double rotation = yawPID.getPIDOutput(Robot.driveSubsystem.getYaw(), this.amount_turn_in_degrees);
     	double left = rotation;
     	double right = -rotation;
-    	Robot.driveSubsystem.setMotors(left, right); //i really hope this is right
+    	Robot.driveSubsystem.setMotors(left, right);
+    	
+    	Robot.writeToFlashDrive.writeToFile(Robot.driveSubsystem.getYaw(), this.amount_turn_in_degrees, autoTurnWriter);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -42,12 +50,15 @@ public class AutoTurnCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.driveSubsystem.setMotors(0, 0);
-    	System.out.println("Booty");
+
+    	Robot.writeToFlashDrive.flushAndClose(autoTurnWriter);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.driveSubsystem.setMotors(0, 0);
+
+    	Robot.writeToFlashDrive.flushAndClose(autoTurnWriter);
     }
 }

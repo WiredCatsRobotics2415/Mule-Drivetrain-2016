@@ -32,6 +32,7 @@ public class DriveSubsystem extends Subsystem {
 	private IMU imu;
 
 	public PID rotationalPID = new PID(1f, 0.0001f, 0f);
+	public PID yawPID = new PID(1f);
 	
 	
 	

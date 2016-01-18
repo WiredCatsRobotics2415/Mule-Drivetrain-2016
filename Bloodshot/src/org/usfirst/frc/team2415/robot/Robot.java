@@ -43,6 +43,10 @@ public class Robot extends IterativeRobot {
 	BufferedWriter writer;
 	
 	public static NetworkTable visionTable = NetworkTable.getTable("GRIP/myContoursReport");
+    
+	public static WriteToFlashDrive writeToFlashDrive;
+	
+	public static AutoStraightDriveCommand autoStraightDriveCommand;
 
 	// private Compressor compressor;
 
@@ -53,7 +57,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = new OI();
 
-		
+		writeToFlashDrive = new WriteToFlashDrive();
 
 		gamepad = new WiredCatGamepad(0);
 		/*
@@ -64,6 +68,8 @@ public class Robot extends IterativeRobot {
 		visionSubsystem = new VisionSubsystem();
 
 		gyroTest = new GyroAutonomousTestCommand();
+		
+		autoStraightDriveCommand = new AutoStraightDriveCommand(5f);
 
 		SmartDashboard.putData(Scheduler.getInstance());
 
@@ -105,8 +111,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		// schedule the autonomous command (example)
-		AutoStraightDriveCommand com = new AutoStraightDriveCommand(5f);
-		com.start();
+		autoStraightDriveCommand.start();
 	}
 
 	/**
