@@ -2,10 +2,9 @@
 package org.usfirst.frc.team2415.robot;
 
 import org.usfirst.frc.team2415.robot.commands.GyroAutonomousTestCommand;
+import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
+import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
-import org.usfirst.frc.team2415.robot.resetcommands.*;
-
-import com.kauailabs.nav6.frc.IMU;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -29,8 +28,6 @@ public class Robot extends IterativeRobot {
 	
 	private GyroAutonomousTestCommand gyroTest;
 	
-	private IMU imu;
-	
 	//private Compressor compressor;
 
     /**
@@ -50,7 +47,7 @@ public class Robot extends IterativeRobot {
 //		
 //		gyroTest = new GyroAutonomousTestCommand();
 		
-		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand());
+		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand(0));
 		
 		SmartDashboard.putData(Scheduler.getInstance());
 		

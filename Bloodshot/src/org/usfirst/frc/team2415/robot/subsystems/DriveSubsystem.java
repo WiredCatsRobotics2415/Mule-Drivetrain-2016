@@ -3,11 +3,11 @@ package org.usfirst.frc.team2415.robot.subsystems;
 import org.usfirst.frc.team2415.robot.RobotMap;
 import org.usfirst.frc.team2415.robot.commands.ArcadeDriveCommand;
 
-import com.kauailabs.nav6.frc.IMU;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +25,7 @@ public class DriveSubsystem extends Subsystem {
 	
 	private CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
 	private Encoder rightEncoder, leftEncoder;
-	private IMU imu;
+	private AHRS ahrs;
 	
 	public DriveSubsystem(){
 		leftTalOne = new CANTalon(RobotMap.LEFT_TALON_ZERO);
@@ -40,9 +40,8 @@ public class DriveSubsystem extends Subsystem {
 		leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 		rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 		
-		SerialPort imuSerialPort = new SerialPort(BAUD_RATE, SerialPort.Port.kMXP);
-		imu = new IMU(imuSerialPort, REFRESH_RATE);
-		imu.zeroYaw();
+		ahrs = new AHRS(SPI.Port.kMXP);
+		ahrs.zeroYaw();
 		
 		
 	}
@@ -119,7 +118,7 @@ public class DriveSubsystem extends Subsystem {
      * @return returns the current yaw value between -180 and 180 degrees
      */
     public double getYaw(){
-    	return imu.getYaw();
+    	return ahrs.getYaw();
     }
     
     /**
@@ -127,7 +126,7 @@ public class DriveSubsystem extends Subsystem {
      * @return returns the current pitch value between -180 and 180 degrees
      */
     public double getPitch(){
-    	return imu.getPitch();
+    	return ahrs.getPitch();
     }
     
     /**
@@ -135,14 +134,14 @@ public class DriveSubsystem extends Subsystem {
      * @return returns the current yaw value between -180 and 180 degrees
      */
     public double getRoll(){
-    	return imu.getRoll();
+    	return ahrs.getRoll();
     }
     
     /**
      * Re-calibrates the IMU's reference point for 0 degrees of rotation in yaw
      */
     public void resetYaw(){
-    	imu.zeroYaw();
+    	ahrs.zeroYaw();
     }
     
     /**
