@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.command.Command;
 public class AutoTurnCommand extends Command {
 	
 	private float amount_turn_in_degrees;
-	private PID rotationalPID;
+	private PID turnPID;
 
     public AutoTurnCommand(float turn) {
         requires(Robot.driveSubsystem);
-        rotationalPID = Robot.driveSubsystem.rotationalPID;
+        turnPID = Robot.driveSubsystem.rotationalPID;
         
     }
 
@@ -28,7 +28,9 @@ public class AutoTurnCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double rotation = rotationalPID.getPIDOutput(Robot.driveSubsystem.getYaw(), this.amount_turn_in_degrees);
+    	double rotation = turnPID.getPIDAngleOutput(Robot.driveSubsystem.getYaw(), 
+    												Robot.driveSubsystem.getWrappedYaw(this.amount_turn_in_degrees),
+    												this.amount_turn_in_degrees);
     	double left = rotation;
     	double right = -rotation;
     	Robot.driveSubsystem.setMotors(left, right); //i really hope this is right

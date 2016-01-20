@@ -5,11 +5,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 import org.usfirst.frc.team2415.robot.commands.AutoStraightDriveCommand;
+import org.usfirst.frc.team2415.robot.commands.AutoTurnCommand;
 import org.usfirst.frc.team2415.robot.commands.GyroAutonomousTestCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
-import org.usfirst.frc.team2415.robot.subsystems.VisionSubsystem;
 
 import com.kauailabs.nav6.frc.IMU;
 
@@ -32,7 +32,6 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 
 	public static DriveSubsystem driveSubsystem;
-	public static VisionSubsystem visionSubsystem;
 
 	public static WiredCatGamepad gamepad;
 
@@ -40,9 +39,6 @@ public class Robot extends IterativeRobot {
 
 	private IMU imu;
 	
-	BufferedWriter writer;
-	
-	public static NetworkTable visionTable = NetworkTable.getTable("GRIP/myContoursReport");
 
 	// private Compressor compressor;
 
@@ -61,7 +57,6 @@ public class Robot extends IterativeRobot {
 		 * SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
 		 */
 		driveSubsystem = new DriveSubsystem();
-		visionSubsystem = new VisionSubsystem();
 
 		gyroTest = new GyroAutonomousTestCommand();
 
@@ -69,30 +64,10 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putData("Reset Encoders", new ResetEncodersCommand());
 		SmartDashboard.putData("Reset Yaw", new ResetYawCommand());
-		SmartDashboard.putData("Drive Straight This Amount", 
-								new AutoStraightDriveCommand(
-										(float)(SmartDashboard.getNumber("Straight Drive Distance", 0)
-												)
-										)
-								);
 		
-		//Reads values from the NetworkTable for vision stuffs
-		try {
-			Runtime.getRuntime().exec(new String[]{"/usr/local/frc/JRE/bin/java", "-jar", "grip.jar", "towertargets.grip"});
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		SmartDashboard.putData("AutoTurnCommand", new AutoTurnCommand(90f));
+		SmartDashboard.putData("AutoStraightDriveCommand", new AutoStraightDriveCommand(5f));
 		
-		double[] defaultValue = new double[0];
-		while(SmartDashboard.getBoolean("Stream area to Riolog?", false)) {
-			double[] areas = visionTable.getNumberArray("area", defaultValue);
-			System.out.print("areas: ");
-			for (double area : areas) {
-				System.out.print(area + "");
-			}
-			System.out.println();
-		}
 
 		
 
@@ -105,8 +80,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		// schedule the autonomous command (example)
-		AutoStraightDriveCommand com = new AutoStraightDriveCommand(5f);
-		com.start();
+		Robot.driveSubsystem.resetEncoders();
 	}
 
 	/**
@@ -151,7 +125,6 @@ public class Robot extends IterativeRobot {
 
 	public void updateStatus() {
 		Robot.driveSubsystem.updateStatus();
-		Robot.visionSubsystem.updateStatus();
 		
 	}
 }

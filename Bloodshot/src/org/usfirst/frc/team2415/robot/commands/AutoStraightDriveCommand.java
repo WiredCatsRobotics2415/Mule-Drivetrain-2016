@@ -56,11 +56,11 @@ public class AutoStraightDriveCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	double speed = rotationalPID.getPIDOutput(Robot.driveSubsystem.getLeftEncoder(), desiredDistance);
-    	double rotation = rotationalPID.getPIDOutput(Robot.driveSubsystem.getYaw(), 0);
+    	//double rotation = rotationalPID.getPIDOutput(Robot.driveSubsystem.getYaw(), 0);
     	if (speed > .90) speed = .90;
     	if (speed < -.90) speed = -.90;
-    	double left = speed - rotation;
-    	double right = speed + rotation;
+    	double left = speed /*- rotation*/;
+    	double right = speed /*+ rotation*/;
     	Robot.driveSubsystem.setMotors(left, -right);
     	
     	try {

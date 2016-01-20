@@ -29,13 +29,23 @@ public class PID {
 		return kI*intergralCounter;
 	}
 	
-	private double derivative(double current){
-		double derivative = current - this.previous;
-		current = this.previous;
+	private double intergralAngle(double error){
+		intergralCounter += error;
+		return kI*intergralCounter;
+	}
+	
+	private double derivative(double current, double desired){
+		double derivative = (desired - current) - this.previous;
+		this.previous = desired - current;
+		System.out.println("Desired - current: " + (desired - current));
 		return kD*derivative;
 	}
 	
 	public double getPIDOutput(double current, double desired){
-		return proportional(current, desired) + intergral(current, desired) + derivative(current);
+		return proportional(current, desired) + intergral(current, desired) + derivative(current, desired);
+	}
+	
+	public double getPIDAngleOutput(double current,double desired, double error){
+		return kP*error + intergralAngle(error) + derivative(current, desired);
 	}
 }

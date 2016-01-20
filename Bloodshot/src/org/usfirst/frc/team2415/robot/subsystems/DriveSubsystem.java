@@ -30,8 +30,9 @@ public class DriveSubsystem extends Subsystem {
 	private CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
 	private Encoder rightEncoder, leftEncoder;
 	private IMU imu;
+	private float kUlt = .75f;
 
-	public PID rotationalPID = new PID(1f, 0.0001f, 0f);
+	public PID rotationalPID = new PID(kUlt*1f, kUlt*0f, kUlt*1f);
 	
 	
 	
@@ -98,6 +99,13 @@ public class DriveSubsystem extends Subsystem {
     
     public double getYaw(){
     	return imu.getYaw();
+    }
+    
+    public double getWrappedYaw(double setPoint){
+    	double error = setPoint - imu.getYaw();
+    	if(error > 180) return error - 360;
+    	if(error < -180) return error + 360;
+    	return error;
     }
     
     public double getPitch(){
