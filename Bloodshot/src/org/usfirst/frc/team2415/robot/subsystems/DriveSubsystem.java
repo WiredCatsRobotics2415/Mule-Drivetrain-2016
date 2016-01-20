@@ -3,6 +3,7 @@ package org.usfirst.frc.team2415.robot.subsystems;
 import org.usfirst.frc.team2415.robot.RobotMap;
 import org.usfirst.frc.team2415.robot.commands.ArcadeDriveCommand;
 
+import com.kauailabs.nav6.frc.IMU;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CANTalon;
@@ -25,7 +26,7 @@ public class DriveSubsystem extends Subsystem {
 	
 	private CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
 	private Encoder rightEncoder, leftEncoder;
-	private AHRS ahrs;
+	private IMU imu;
 	
 	public DriveSubsystem(){
 		leftTalOne = new CANTalon(RobotMap.LEFT_TALON_ZERO);
@@ -40,8 +41,9 @@ public class DriveSubsystem extends Subsystem {
 		leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 		rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 		
-		ahrs = new AHRS(SPI.Port.kMXP);
-		ahrs.zeroYaw();
+		SerialPort imuSerialPort = new SerialPort(BAUD_RATE, SerialPort.Port.kMXP);
+		imu = new IMU(imuSerialPort, REFRESH_RATE);
+		imu.zeroYaw();
 		
 		
 	}
@@ -118,7 +120,7 @@ public class DriveSubsystem extends Subsystem {
      * @return returns the current yaw value between -180 and 180 degrees
      */
     public double getYaw(){
-    	return ahrs.getYaw();
+    	return imu.getYaw();
     }
     
     /**
@@ -126,7 +128,7 @@ public class DriveSubsystem extends Subsystem {
      * @return returns the current pitch value between -180 and 180 degrees
      */
     public double getPitch(){
-    	return ahrs.getPitch();
+    	return imu.getPitch();
     }
     
     /**
@@ -134,14 +136,14 @@ public class DriveSubsystem extends Subsystem {
      * @return returns the current yaw value between -180 and 180 degrees
      */
     public double getRoll(){
-    	return ahrs.getRoll();
+    	return imu.getRoll();
     }
     
     /**
      * Re-calibrates the IMU's reference point for 0 degrees of rotation in yaw
      */
     public void resetYaw(){
-    	ahrs.zeroYaw();
+    	imu.zeroYaw();
     }
     
     /**
@@ -154,6 +156,10 @@ public class DriveSubsystem extends Subsystem {
 		SmartDashboard.putNumber("Right Talon", getRightTal());
 		SmartDashboard.putNumber("Left Talon", getLeftTal());
 		
+	}
+	
+	public int getFreshRate(){
+		return REFRESH_RATE;
 	}
 }
 

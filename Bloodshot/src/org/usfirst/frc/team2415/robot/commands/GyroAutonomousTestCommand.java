@@ -1,9 +1,9 @@
 package org.usfirst.frc.team2415.robot.commands;
 
+import java.util.ArrayList;
+
 import org.usfirst.frc.team2415.robot.Robot;
 
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -13,12 +13,14 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class GyroAutonomousTestCommand extends Command {
 	
-	private double desiredYaw, lastError, elapsedTime, intCumulative;
+	private double desiredYaw, lastError, elapsedTime;
 	
 	private long startingTime;
 	private double p, i, d;
 	private boolean isDone = false;
 	
+	private ArrayList<Double> integral;
+	private final double INTEGRAL_TIMEFRAME= 1;
 	
     public GyroAutonomousTestCommand(double desiredYaw) {
         requires(Robot.driveSubsystem);
@@ -26,8 +28,10 @@ public class GyroAutonomousTestCommand extends Command {
         startingTime = System.currentTimeMillis();
         lastError = 0;
         p = .001;
-        i = .01;
+        i = .0;
         d = .5;
+        
+        integral = new ArrayList();
     }
     
     // Called just before this Command runs the first time
@@ -62,8 +66,17 @@ public class GyroAutonomousTestCommand extends Command {
     private double integral(double error) {
     	
     	if(lastError == 0) return 0;
-    	intCumulative += .5*(error + lastError)*elapsedTime;
-    	return i*intCumulative;
+    	double intInstance = .5*(error+lastError)*elapsedTime;
+    	if(integral.size() < (int)Robot.driveSubsystem.getFreshRate()*INTEGRAL_TIMEFRAME)
+    		integral.add(intInstance);
+    	else{
+    		integral.remove(0);
+    		integral.add(intInstance);
+    	}
+    	double sum = 0;
+    	for(int i=0; i<integral.size(); i++)
+    		sum += integral.get(i);
+    	return i*sum;
     }
     
     private double derivative(double error) {
