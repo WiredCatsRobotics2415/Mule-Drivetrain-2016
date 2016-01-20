@@ -5,6 +5,7 @@ public class PID {
 	private float kP, kI, kD;
 	private double intergralCounter = 0;
 	private double previous = 0;
+	private double previousTime = 0;
 	
 	public PID(float p,float i, float d){
 		kP = p;
@@ -25,18 +26,20 @@ public class PID {
 	}
 	
 	private double intergral(double current, double desired){
-		intergralCounter += (desired - current);
+		intergralCounter += (desired - current)/((System.currentTimeMillis()-previousTime)/1000);
+		previousTime = System.currentTimeMillis();
 		return kI*intergralCounter;
 	}
 	
 	private double intergralAngle(double error){
-		intergralCounter += error;
+		intergralCounter += error/((System.currentTimeMillis()-previousTime)/1000);
+		previousTime = System.currentTimeMillis();
 		return kI*intergralCounter;
 	}
 	
 	private double derivative(double current, double desired){
-		double derivative = (desired - current) - this.previous;
-		this.previous = desired - current;
+		double derivative = (desired - current) - previous;
+		previous = desired - current;
 		System.out.println("Desired - current: " + (desired - current));
 		return kD*derivative;
 	}

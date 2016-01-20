@@ -39,6 +39,7 @@ public class Robot extends IterativeRobot {
 
 	private IMU imu;
 	
+	
 
 	// private Compressor compressor;
 
@@ -67,6 +68,8 @@ public class Robot extends IterativeRobot {
 		
 		SmartDashboard.putData("AutoTurnCommand", new AutoTurnCommand(90f));
 		SmartDashboard.putData("AutoStraightDriveCommand", new AutoStraightDriveCommand(5f));
+		
+		Robot.driveSubsystem.debugAutoStraightDriveCommand = SmartDashboard.getBoolean("Write AutoStraightDrive to Flashdrive?", false);
 		
 
 		

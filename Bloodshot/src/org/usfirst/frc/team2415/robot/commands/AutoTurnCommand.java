@@ -29,8 +29,8 @@ public class AutoTurnCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	double rotation = turnPID.getPIDAngleOutput(Robot.driveSubsystem.getYaw(), 
-    												Robot.driveSubsystem.getWrappedYaw(this.amount_turn_in_degrees),
-    												this.amount_turn_in_degrees);
+    												amount_turn_in_degrees,
+    												Robot.driveSubsystem.getWrappedYaw(amount_turn_in_degrees));
     	double left = rotation;
     	double right = -rotation;
     	Robot.driveSubsystem.setMotors(left, right); //i really hope this is right

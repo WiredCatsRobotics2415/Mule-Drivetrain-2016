@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -34,6 +35,9 @@ public class DriveSubsystem extends Subsystem {
 
 	public PID rotationalPID = new PID(kUlt*1f, kUlt*0f, kUlt*1f);
 	
+	public boolean debugAutoStraightDriveCommand;
+	public boolean debugAutoTurnCommand;
+	
 	
 	
 	public DriveSubsystem(){
@@ -42,8 +46,16 @@ public class DriveSubsystem extends Subsystem {
 		rightTalOne = new CANTalon(RobotMap.RIGHT_TALON_ZERO);
 		rightTalTwo = new CANTalon(RobotMap.RIGHT_TALON_ONE);
 		
+		LiveWindow.addActuator("DriveSubsystem", "CANTalon Left1", leftTalOne);
+		LiveWindow.addActuator("DriveSubsystem", "CANTalon Left2", leftTalTwo);
+		LiveWindow.addActuator("DriveSubsystem", "CANTalon Right1", rightTalOne);
+		LiveWindow.addActuator("DriveSubsystem", "CANTalon Right2", rightTalOne);
+		
 		rightEncoder = new Encoder(RobotMap.RIGHT_ENCODER[0],RobotMap.RIGHT_ENCODER[1]);
 		leftEncoder = new Encoder(RobotMap.LEFT_ENCODER[0],RobotMap.LEFT_ENCODER[1]);
+		
+		LiveWindow.addSensor("DriveSubsystem", "Left Encoder", leftEncoder);
+		LiveWindow.addSensor("DriveSubsystem", "Right Encoder", rightEncoder);
 		
 		resetEncoders();
 		leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
