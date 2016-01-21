@@ -15,23 +15,23 @@ public class GyroAutonomousTestCommand extends Command {
 	
 	private double desiredYaw, lastError, elapsedTime;
 	
-	private long startingTime;
+	private long lastTime;
 	private double p, i, d;
 	private boolean isDone = false;
 	
 	private ArrayList<Double> integral;
-	private final double INTEGRAL_TIMEFRAME= 1;
+	private final double INTEGRAL_TIMEFRAME= .5;
 	
     public GyroAutonomousTestCommand(double desiredYaw) {
         requires(Robot.driveSubsystem);
         this.desiredYaw = desiredYaw;
-        startingTime = System.currentTimeMillis();
+        lastTime = System.currentTimeMillis();
         lastError = 0;
-        p = .001;
-        i = .0;
-        d = .5;
+        p = .01;
+        i = .006;
+        d = .0;
         
-        integral = new ArrayList();
+        integral = new ArrayList<Double>();
     }
     
     // Called just before this Command runs the first time
@@ -43,18 +43,21 @@ public class GyroAutonomousTestCommand extends Command {
     protected void execute() {
     	long time = System.currentTimeMillis();
     	double currYaw = Robot.driveSubsystem.getYaw();
-    	elapsedTime = (time - startingTime)/1000.0;
+    	elapsedTime = (time - lastTime)/1000.0;
     	
     	double error = desiredYaw - currYaw;
-    	//if(error > 180) error -= 360;
-    	//else if(error < -180) error += 360;
     	
-    	double pid = proportional(error) + integral(error) + derivative(error);
+    	if(error > 180) error -= 360;
+    	else if(error < -180) error += 360;
+    	
+    	double pid = proportional(error) + integral(error); //+ derivative(error);
+    	if (error < 10 && error > -10) {
+    		pid += derivative(error);
+    	}
     	System.out.println("Error: " + error + ",\t" + "PID: " + pid);
     	Robot.driveSubsystem.setMotors(pid, pid);
     	lastError = error;
-    	
-    	startingTime = time;
+    	lastTime = time;
     	if (currYaw == desiredYaw) isDone = true;
 
     }
