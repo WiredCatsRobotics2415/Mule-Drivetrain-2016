@@ -39,6 +39,11 @@ public class Robot extends IterativeRobot {
 
 	private IMU imu;
 	
+	private final static String[] GRIP_ARGS = new String[] {
+        "/usr/local/frc/JRE/bin/java", "-jar",
+        "/home/lvuser/grip.jar", "/home/lvuser/project.grip" };
+	
+    private final NetworkTable grip = NetworkTable.getTable("grip");
 	
 
 	// private Compressor compressor;
@@ -50,7 +55,11 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		oi = new OI();
 
-		
+		try {
+            Runtime.getRuntime().exec(GRIP_ARGS);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 		gamepad = new WiredCatGamepad(0);
 		/*
@@ -116,6 +125,9 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		updateStatus();
+		for (double area : grip.getNumberArray("targets/area", new double[0])) {
+            System.out.println("Got contour with area=" + area);
+		}
 
 	}
 
