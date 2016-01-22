@@ -47,7 +47,7 @@ public class Robot extends IterativeRobot {
 //		
 //		gyroTest = new GyroAutonomousTestCommand();
 		
-		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand(0));
+		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand(90));
 		
 		SmartDashboard.putData(Scheduler.getInstance());
 		
@@ -81,7 +81,7 @@ public class Robot extends IterativeRobot {
         // this line or comment it out.
     	
     	driveSubsystem.resetYaw();
-    	
+    	System.out.println(driveSubsystem.getYaw());
     }
 
     /**
@@ -89,7 +89,6 @@ public class Robot extends IterativeRobot {
      * You can use it to reset subsystems before shutting down.
      */
     public void disabledInit(){
-
     }
 
     /**
