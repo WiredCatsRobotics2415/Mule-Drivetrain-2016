@@ -47,7 +47,7 @@ public class Robot extends IterativeRobot {
 //		
 //		gyroTest = new GyroAutonomousTestCommand();
 		
-		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand(90));
+		//gamepad.a_button.whenPressed(new GyroAutonomousTestCommand(90));
 		
 		SmartDashboard.putData(Scheduler.getInstance());
 		
