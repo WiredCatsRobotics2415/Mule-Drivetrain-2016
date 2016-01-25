@@ -1,7 +1,5 @@
 package org.usfirst.frc.team2415.robot;
 
-import java.util.ArrayList;
-
 public class PID {
 	double p, i, d;
 	private double lastError, elapsedTime;

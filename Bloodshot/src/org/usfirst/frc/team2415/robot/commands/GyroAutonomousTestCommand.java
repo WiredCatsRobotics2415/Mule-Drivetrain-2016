@@ -14,9 +14,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class GyroAutonomousTestCommand extends Command {
 	
-	private double desiredYaw, lastError, elapsedTime;
-	
-	private long lastTime;
+	private double desiredYaw;
 	private boolean isDone = false;
 	
 	private PID pid;
@@ -24,11 +22,9 @@ public class GyroAutonomousTestCommand extends Command {
     public GyroAutonomousTestCommand(double desiredYaw) {
         requires(Robot.driveSubsystem);
         this.desiredYaw = desiredYaw;
-        lastTime = System.currentTimeMillis();
-        lastError = 0;
         double kUlt = 2;
         double p = kUlt * .01;
-        double i = kUlt * .001;//.006;
+        double i = kUlt * .001;
         double d = kUlt * .001;
         pid = new PID(p,i,d, true);
     }
@@ -46,6 +42,7 @@ public class GyroAutonomousTestCommand extends Command {
     	else if(error < -180) error += 360;
     	
     	double power = pid.pidOut(error);
+    	Robot.driveSubsystem.setMotors(power, power);
     }
     
 //    private double rollingAverage(ArrayList<Double> data){
