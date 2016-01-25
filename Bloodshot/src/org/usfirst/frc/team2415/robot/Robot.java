@@ -5,6 +5,7 @@ import org.usfirst.frc.team2415.robot.commands.GyroAutonomousTestCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
+import org.usfirst.frc.team2415.robot.subsystems.IntakeSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -23,6 +24,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 	public static DriveSubsystem driveSubsystem;
+	public static IntakeSubsystem intakeSubsystem;
 	
 	public static WiredCatGamepad gamepad;
 	
@@ -44,6 +46,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
 		*/
 		driveSubsystem = new DriveSubsystem();
+		intakeSubsystem = new IntakeSubsystem();
 //		
 //		gyroTest = new GyroAutonomousTestCommand();
 		
