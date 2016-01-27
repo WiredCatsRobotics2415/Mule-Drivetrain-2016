@@ -2,16 +2,9 @@ package org.usfirst.frc.team2415.robot;
 
 public class MotionProfile{
 	
-	public double time1, time2, time3,
-				vel, finalVel, vMax, accel;
+	public double time1, time2, time3;
 	
 	public MotionProfile(double displacement, double currVel, double finalVel, double vMax, double accel){
-        this.finalVel = finalVel;
-        this.vMax = vMax;
-        this.accel = accel;
-
-        vel = currVel;
-        
     	int dir = displacement > 0 ? 1:-1;
     	
     	time1 = (dir*vMax - currVel)/(accel);

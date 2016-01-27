@@ -4,11 +4,9 @@ import org.usfirst.frc.team2415.robot.RobotMap;
 import org.usfirst.frc.team2415.robot.commands.ArcadeDriveCommand;
 
 import com.kauailabs.nav6.frc.IMU;
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -95,7 +93,7 @@ public class DriveSubsystem extends Subsystem {
      * Gives the distance traveled by the right motors in relation to the point at which the right encoder is reset
      * @return inches traveled from the reset point of the right encoder
      */
-    public double getRightEncoder(){
+    public double getRightDist(){
     	return rightEncoder.getDistance();
     }
     
@@ -103,8 +101,16 @@ public class DriveSubsystem extends Subsystem {
      * Gives the distance traveled by the left motors in relation to the point at which the left encoder is reset
      * @return inches traveled from the reset point of the left encoder
      */
-    public double getLeftEncoder(){
+    public double getLeftDist(){
     	return leftEncoder.getDistance();
+    }
+    
+    public double getLeftVel(){
+    	return leftEncoder.getRate();
+    }
+    
+    public double getRightVel(){
+    	return rightEncoder.getRate();
     }
     
     /**
@@ -150,8 +156,8 @@ public class DriveSubsystem extends Subsystem {
      * Updates data on SmartDashboard for electronics within the Drive Subsystem
      */
 	public void updateStatus() {
-		SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
-		SmartDashboard.putNumber("Right Encoder", getRightEncoder());
+		SmartDashboard.putNumber("Left Encoder", getLeftDist());
+		SmartDashboard.putNumber("Right Encoder", getRightDist());
 		SmartDashboard.putNumber("Yaw", getYaw());
 		SmartDashboard.putNumber("Right Talon", getRightTal());
 		SmartDashboard.putNumber("Left Talon", getLeftTal());
