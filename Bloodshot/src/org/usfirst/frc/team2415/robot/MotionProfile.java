@@ -16,6 +16,12 @@ public class MotionProfile{
     	
     	time2 = (dist2_1/(dir*vMax)) + time1;
     	time3 = timef_2 + time2;
+    	
+    	if(time1 > time2){
+    		double t = time2;
+    		time2 = time1;
+    		time1 = t;
+    	}
 	}
 	
 }

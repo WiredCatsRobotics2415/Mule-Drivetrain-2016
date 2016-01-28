@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team2415.robot;
 
+import org.usfirst.frc.team2415.robot.commands.autonomous.AutoProtypeCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
@@ -25,6 +26,8 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
+	private AutoProtypeCommand auto;
+	
 	//private Compressor compressor;
 
     /**
@@ -33,18 +36,17 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 		
-		gamepad = new WiredCatGamepad(0);
-		/*
-		compressor = new Compressor(RobotMap.PCM_ID);
-		//Testing testing 123
-		SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
-		*/
+//		gamepad = new WiredCatGamepad(0);
+//		compressor = new Compressor(RobotMap.PCM_ID);
+//		//Testing testing 123
+//		SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
+		
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 //		
 //		gyroTest = new GyroAutonomousTestCommand();
-		
-		//gamepad.a_button.whenPressed(new GyroAutonomousTestCommand(90));
+//		
+//		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand(90));
 		
 		SmartDashboard.putData(Scheduler.getInstance());
 		
@@ -56,11 +58,13 @@ public class Robot extends IterativeRobot {
 	
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		updateStatus();
+		//updateStatus();
 	}
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
+    	auto = new AutoProtypeCommand();
+    	auto.start();
     }
 
     /**
@@ -76,36 +80,23 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
-    	
-    	driveSubsystem.resetYaw();
-    	System.out.println(driveSubsystem.getYaw());
     }
 
     /**
      * This function is called when the disabled button is hit.
      * You can use it to reset subsystems before shutting down.
      */
-    public void disabledInit(){
-    }
-
-    /**
-     * This function is called periodically during operator control
-     */
+    public void disabledInit(){}
+    
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        //updateStatus();
-      //  System.out.println(driveSubsystem.getYaw());
-        
     }
     
-    /**
-     * This function is called periodically during test mode
-     */
     public void testPeriodic() {
         LiveWindow.run();
     }
     
     public void updateStatus() {
-    	//Robot.driveSubsystem.updateStatus();
+    	Robot.driveSubsystem.updateStatus();
     }
 }

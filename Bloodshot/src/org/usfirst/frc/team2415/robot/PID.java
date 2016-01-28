@@ -6,13 +6,11 @@ public class PID {
 	private long lastTime;
 	
 	private double integralError = 0;
-	private boolean degreesIn;
 	
-	public PID(double p, double i, double d, boolean degreesIn){
+	public PID(double p, double i, double d){
 		this.p = p;
 		this.i = i;
 		this.d = d;
-		this.degreesIn = degreesIn;
         lastTime = System.currentTimeMillis();
 
 	}
@@ -54,10 +52,6 @@ public class PID {
     private double derivative(double error) {
     	
     	double diff = error-lastError;
-    	if(degreesIn){
-	    	if(diff > 180) diff -= 360;
-	    	if(diff < -180) diff += 360;
-    	}
     	return d * diff/elapsedTime;
     }
 }
