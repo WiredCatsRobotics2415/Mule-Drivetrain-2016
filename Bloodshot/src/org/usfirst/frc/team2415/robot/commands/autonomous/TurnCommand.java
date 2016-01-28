@@ -29,7 +29,7 @@ public class TurnCommand extends Command {
         this.finalVel = finalVel;
         this.currVel = (WHEEL_RADIUS/(2*WHEEL_TRACK))*(Robot.driveSubsystem.getRightVel() - Robot.driveSubsystem.getLeftVel()); 
         motion = new MotionProfile(angle, currVel, finalVel, vMax, ACCEL);
-        pid = new PID(0,0,0, false);
+        //pid = new PID(0,0,0, false);
         
         startTime = System.currentTimeMillis();
     }

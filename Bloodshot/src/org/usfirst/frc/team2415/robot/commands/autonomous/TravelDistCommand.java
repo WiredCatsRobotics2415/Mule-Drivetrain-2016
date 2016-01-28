@@ -32,16 +32,20 @@ public class TravelDistCommand extends Command {
         motion = new MotionProfile(distance, currVel, finalVel, vMax, acc);
         pid = new PID(0.02, 0.002, 0.002);
         
-        startLeftDist = Robot.driveSubsystem.getLeftDist();
+        this.distance = distance*(3.75*Math.PI)/120;
+        
+    	System.out.println("leftStart: " + startLeftDist + ",\trightStart: " + startRightDist);
     }
 
     protected void initialize() {
     	startTime = lastTime = System.currentTimeMillis();
+        Robot.driveSubsystem.resetEncoders();
+        startLeftDist = Robot.driveSubsystem.getLeftDist();
+        startRightDist = Robot.driveSubsystem.getRightDist();
     }
 
     protected void execute() {
     	double timeStep = (System.currentTimeMillis() - lastTime)/1000.0;
-    	System.out.println(timeStep);
     	
     	if((System.currentTimeMillis() - startTime)/1000.0 < motion.time1){
     		currVel += acc*timeStep;
@@ -50,14 +54,12 @@ public class TravelDistCommand extends Command {
     		currVel = vMax;
     	}// currVel = vMax;
     	if((System.currentTimeMillis() - startTime)/1000.0 >= motion.time2 && (System.currentTimeMillis() - startTime)/1000.0 < motion.time3){
-    		currVel -= acc*timeStep;
+    		currVel = vMax;//-= acc*timeStep;
     	}
-    	if((System.currentTimeMillis() - startTime)/1000.0 > motion.time3){
+    	if((System.currentTimeMillis() - startTime)/1000.0 >= motion.time3){
     		currVel = finalVel;
     		isDone = true;
     	}
-    	
-//    	System.out.println(currVel);
     	
     	double leftVel = (1/WHEEL_RADIUS)*currVel;
     	double rightVel = (1/WHEEL_RADIUS)*currVel;
@@ -65,20 +67,23 @@ public class TravelDistCommand extends Command {
     	double leftPower = (leftVel > 0) ? TOP_POWER_TO_VEL*leftVel : BOT_POWER_TO_VEL*leftVel;
     	double rightPower = (rightVel > 0) ? TOP_POWER_TO_VEL*rightVel : BOT_POWER_TO_VEL*rightVel;
     	
-    	System.out.println("left: " + leftPower + " right: " + rightPower);
-    	
     	Robot.driveSubsystem.setMotors(leftPower, rightPower);
     	
     	double leftReading = Robot.driveSubsystem.getLeftDist() - startLeftDist;
-    	double rightReading = Robot.driveSubsystem.getRightDist() - startLeftDist;
+    	double rightReading = Robot.driveSubsystem.getRightDist() - startRightDist;
+
+//    	System.out.println("left: " + leftReading + ",\tright: " + rightReading);
     	
-    	leftPower *= MOTOR_LOAD;
+    	leftPower *= MOTOR_LOAD;	
     	rightPower *= MOTOR_LOAD;
     	
-    	leftPower += pid.pidOut(distance - leftReading);
-    	rightPower += pid.pidOut(-distance - rightReading);
+//    	double pidLeft = pid.pidOut(distance - leftReading);
+//    	double pidRight = pid.pidOut(-distance - rightReading);
     	
-    	Robot.driveSubsystem.setMotors(leftPower, -rightPower);
+//    	leftPower += pidLeft;
+//    	rightPower += pidRight;
+    	
+    	Robot.driveSubsystem.setMotors(-leftPower, rightPower);
     	lastTime = System.currentTimeMillis();
     }
 
@@ -87,11 +92,14 @@ public class TravelDistCommand extends Command {
     }
 
     protected void end() {
-//    	int count = 0;
-//    	while(count < 10000){
-//    		Robot.driveSubsystem.setMotors(0, 0);
-//    		count++;
-//    	}
+    	int count = 0;
+    	for(int i=0; i<100; i++){
+			Robot.driveSubsystem.setMotors(1, -1);
+    	}
+		while(count < 100){
+			Robot.driveSubsystem.setMotors(0, 0);
+			count++;
+		}
     }
 
     protected void interrupted() {

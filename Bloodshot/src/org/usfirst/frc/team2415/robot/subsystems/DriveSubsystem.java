@@ -17,18 +17,17 @@ public class DriveSubsystem extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	
-	private final float DISTANCE_PER_PULSE = 1/45.5f;
+	private final float DISTANCE_PER_PULSE = 1;
 	
 	private final int BAUD_RATE = 57600;
 	private final byte REFRESH_RATE = 50;
 	
-	private CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
+	private CANTalon leftTalOne, rightTalOne, rightTalTwo;
 	private Encoder rightEncoder, leftEncoder;
 	private IMU imu;
 	
 	public DriveSubsystem(){
 		leftTalOne = new CANTalon(RobotMap.LEFT_TALON_ZERO);
-		leftTalTwo = new CANTalon(RobotMap.LEFT_TALON_ONE);
 		rightTalOne = new CANTalon(RobotMap.RIGHT_TALON_ZERO);
 		rightTalTwo = new CANTalon(RobotMap.RIGHT_TALON_ONE);
 		
@@ -47,7 +46,7 @@ public class DriveSubsystem extends Subsystem {
 	}
 	
     public void initDefaultCommand() {
-    	setDefaultCommand(new ArcadeDriveCommand());
+    	//setDefaultCommand(new ArcadeDriveCommand());
     	
     }
     
@@ -56,7 +55,6 @@ public class DriveSubsystem extends Subsystem {
      */
     public void stop(){
     	leftTalOne.set(0);
-    	leftTalTwo.set(0);
     	rightTalOne.set(0);
     	rightTalTwo.set(0);
     }
@@ -68,7 +66,6 @@ public class DriveSubsystem extends Subsystem {
      */
     public void setMotors(double left, double right){
     	leftTalOne.set(left);
-    	leftTalTwo.set(left);
     	rightTalOne.set(right);
     	rightTalTwo.set(right);
     }
@@ -94,7 +91,7 @@ public class DriveSubsystem extends Subsystem {
      * @return inches traveled from the reset point of the right encoder
      */
     public double getRightDist(){
-    	return rightEncoder.getDistance();
+    	return rightEncoder.get();
     }
     
     /**
@@ -102,7 +99,7 @@ public class DriveSubsystem extends Subsystem {
      * @return inches traveled from the reset point of the left encoder
      */
     public double getLeftDist(){
-    	return leftEncoder.getDistance();
+    	return leftEncoder.get();
     }
     
     public double getLeftVel(){
