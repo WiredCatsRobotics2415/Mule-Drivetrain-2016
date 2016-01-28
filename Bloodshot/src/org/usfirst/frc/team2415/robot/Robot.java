@@ -1,9 +1,9 @@
 
 package org.usfirst.frc.team2415.robot;
 
-import org.usfirst.frc.team2415.robot.commands.GyroAutonomousTestCommand;
+import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
+import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
-import org.usfirst.frc.team2415.robot.resetcommands.*;
 
 import com.kauailabs.nav6.frc.IMU;
 
@@ -27,8 +27,6 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
-	private GyroAutonomousTestCommand gyroTest;
-	
 	private IMU imu;
 	
 	//private Compressor compressor;
@@ -41,19 +39,10 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
 		
 		gamepad = new WiredCatGamepad(0);
-		/*
-		compressor = new Compressor(RobotMap.PCM_ID);
-		//Testing testing 123
-		SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
-		*/
+//		compressor = new Compressor(RobotMap.PCM_ID);
 		driveSubsystem = new DriveSubsystem();
-//		
-//		gyroTest = new GyroAutonomousTestCommand();
-		
-		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand());
 		
 		SmartDashboard.putData(Scheduler.getInstance());
-		
 		SmartDashboard.putData("Reset Encoders", new ResetEncodersCommand());
 		SmartDashboard.putData("Reset Yaw", new ResetYawCommand());
 		

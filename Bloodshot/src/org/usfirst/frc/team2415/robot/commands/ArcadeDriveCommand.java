@@ -9,6 +9,12 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class ArcadeDriveCommand extends Command {
+	
+	private float DEADBAND = 0.05f;
+	private float INTERPOLATION_FACTOR = 0.6f;
+	private float STRAIGHT_LIMITER = 0.9f;
+	private float TURN_BOOSTER = 1.05f;
+	
 
     public ArcadeDriveCommand() {
         requires(Robot.driveSubsystem);
@@ -25,17 +31,19 @@ public class ArcadeDriveCommand extends Command {
     	double leftY = -Robot.gamepad.leftY();
     	double rightX = Robot.gamepad.rightX();
     	
-    	double left = leftY - rightX;
-    	double right =  leftY + rightX;
+    	if(Math.abs(leftY) < DEADBAND) leftY = 0;
+    	if(Math.abs(rightX) < DEADBAND) rightX = 0;
+    	
+    	leftY = INTERPOLATION_FACTOR*Math.pow(leftY, 3) + (1 - INTERPOLATION_FACTOR)*leftY;
+    	rightX = INTERPOLATION_FACTOR*Math.pow(rightX, 3) + (1 - INTERPOLATION_FACTOR)*rightX;
+    	
+    	double left = leftY*STRAIGHT_LIMITER - rightX*TURN_BOOSTER;
+    	double right =  leftY*STRAIGHT_LIMITER + rightX*TURN_BOOSTER;
+    	
+    	if(Math.abs(left) >= 1) Robot.driveSubsystem.enableRightBreakState();
+    	if(Math.abs(right) >= 1) Robot.driveSubsystem.enableLeftBreakState();
     	
     	Robot.driveSubsystem.setMotors(-left, right);
-
-		SmartDashboard.putNumber("Left Encoder", -Robot.driveSubsystem.getLeftEncoder());
-		SmartDashboard.putNumber("Right Encoder", Robot.driveSubsystem.getRightEncoder());
-		
-		SmartDashboard.putNumber("Yaw", Robot.driveSubsystem.getYaw());
-		SmartDashboard.putNumber("Pitch", Robot.driveSubsystem.getPitch());
-		SmartDashboard.putNumber("Roll", Robot.driveSubsystem.getRoll());
     }
 
     // Make this return true when this Command no longer needs to run execute()

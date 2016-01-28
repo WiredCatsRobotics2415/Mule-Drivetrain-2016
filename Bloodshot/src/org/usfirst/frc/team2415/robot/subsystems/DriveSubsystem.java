@@ -26,7 +26,7 @@ public class DriveSubsystem extends Subsystem {
 	
 	private final byte REFRESH_RATE = 50;
 	
-	private CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
+	public CANTalon leftTalOne, leftTalTwo, rightTalOne, rightTalTwo;
 	private Encoder rightEncoder, leftEncoder;
 	private IMU imu;
 	
@@ -108,6 +108,32 @@ public class DriveSubsystem extends Subsystem {
     public void resetYaw(){
     	imu.zeroYaw();
     }
+    
+    public void enableRightBreakState(){
+    	rightTalOne.enableBrakeMode(true);
+    	rightTalTwo.enableBrakeMode(true);
+    }
+    
+    public void enableLeftBreakState(){
+    	leftTalOne.enableBrakeMode(true);
+    	leftTalTwo.enableBrakeMode(true);
+    }
+    
+    /**
+     * Get's the break state of the right side
+     * @return True if break is on, false if coast is on
+     */
+    public boolean getRightBreakState(){
+    	return (rightTalOne.getBrakeEnableDuringNeutral() && rightTalTwo.getBrakeEnableDuringNeutral());
+    }
+    
+    /**
+     * Get's the break state of the left side
+     * @return True if break is on, false if coast is on
+     */
+    public boolean getLeftBreakState(){
+    	return (leftTalOne.getBrakeEnableDuringNeutral() && leftTalTwo.getBrakeEnableDuringNeutral());
+    }
 
 	public void updateStatus() {
 		SmartDashboard.putNumber("Left Encoder", getLeftEncoder());
@@ -115,6 +141,9 @@ public class DriveSubsystem extends Subsystem {
 		SmartDashboard.putNumber("Yaw", getYaw());
 		SmartDashboard.putNumber("Right Talon", getRightTal());
 		SmartDashboard.putNumber("Left Talon", getLeftTal());
+
+		SmartDashboard.putBoolean("Left Break State", getLeftBreakState());
+		SmartDashboard.putBoolean("Right Break State", getRightBreakState());
 		
 	}
 }
