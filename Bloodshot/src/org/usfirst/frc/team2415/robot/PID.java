@@ -20,7 +20,12 @@ public class PID {
 		
     	elapsedTime = (time - lastTime)/1000.0;
     	
-    	double out = proportional(error) + integral(error) + derivative(error);
+    	double powerP = proportional(error);
+    	double powerI = integral(error);
+    	double powerD = derivative(error);
+    	System.out.println(powerP + ",\t" + powerI + ",\t" + powerD);
+    	
+    	double out = powerP + powerI + powerD;
     	
     	lastError = error;
     	lastTime = time;
@@ -32,25 +37,13 @@ public class PID {
     }
     
     private double integral(double error) {
-    	
     	if(lastError == 0) return 0;
     	integralError += .5*(error+lastError)*elapsedTime;
-    	
-//    	if(integral.size() < (int)Robot.driveSubsystem.getFreshRate()*INTEGRAL_TIMEFRAME)
-//    		integral.add(intInstance);
-//    	else{
-//    		integral.remove(0);
-//    		integral.add(intInstance);
-//    	}
-//    	
-//    	double sum = 0;
-//    	for(int i=0; i<integral.size(); i++)
-//  		sum += integral.get(i);
     	return i*integralError;
     }
     
     private double derivative(double error) {
-    	
+    	if(elapsedTime <= 0) return 0;
     	double diff = error-lastError;
     	return d * diff/elapsedTime;
     }

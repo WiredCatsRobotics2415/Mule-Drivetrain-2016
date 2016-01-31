@@ -30,8 +30,8 @@ public class ArcadeDriveCommand extends Command {
     	
     	Robot.driveSubsystem.setMotors(-left, right);
 
-		SmartDashboard.putNumber("Left Encoder", -Robot.driveSubsystem.getLeftDist());
-		SmartDashboard.putNumber("Right Encoder", Robot.driveSubsystem.getRightDist());
+		SmartDashboard.putNumber("Left Encoder", -Robot.driveSubsystem.getLeft());
+		SmartDashboard.putNumber("Right Encoder", Robot.driveSubsystem.getRight());
 		
 		SmartDashboard.putNumber("Yaw", Robot.driveSubsystem.getYaw());
 		SmartDashboard.putNumber("Pitch", Robot.driveSubsystem.getPitch());

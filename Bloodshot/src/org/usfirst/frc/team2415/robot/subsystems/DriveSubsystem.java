@@ -17,8 +17,6 @@ public class DriveSubsystem extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	
-	private final float DISTANCE_PER_PULSE = 1;
-	
 	private final int BAUD_RATE = 57600;
 	private final byte REFRESH_RATE = 50;
 	
@@ -35,8 +33,6 @@ public class DriveSubsystem extends Subsystem {
 		leftEncoder = new Encoder(RobotMap.LEFT_ENCODER[0],RobotMap.LEFT_ENCODER[1]);
 		
 		resetEncoders();
-		leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-		rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
 		
 		SerialPort imuSerialPort = new SerialPort(BAUD_RATE, SerialPort.Port.kMXP);
 		imu = new IMU(imuSerialPort, REFRESH_RATE);
@@ -90,7 +86,7 @@ public class DriveSubsystem extends Subsystem {
      * Gives the distance traveled by the right motors in relation to the point at which the right encoder is reset
      * @return inches traveled from the reset point of the right encoder
      */
-    public double getRightDist(){
+    public int getRight(){
     	return rightEncoder.get();
     }
     
@@ -98,7 +94,7 @@ public class DriveSubsystem extends Subsystem {
      * Gives the distance traveled by the left motors in relation to the point at which the left encoder is reset
      * @return inches traveled from the reset point of the left encoder
      */
-    public double getLeftDist(){
+    public int getLeft(){
     	return leftEncoder.get();
     }
     
@@ -153,8 +149,8 @@ public class DriveSubsystem extends Subsystem {
      * Updates data on SmartDashboard for electronics within the Drive Subsystem
      */
 	public void updateStatus() {
-		SmartDashboard.putNumber("Left Encoder", getLeftDist());
-		SmartDashboard.putNumber("Right Encoder", getRightDist());
+		SmartDashboard.putNumber("Left Encoder", getLeft());
+		SmartDashboard.putNumber("Right Encoder", getRight());
 		SmartDashboard.putNumber("Yaw", getYaw());
 		SmartDashboard.putNumber("Right Talon", getRightTal());
 		SmartDashboard.putNumber("Left Talon", getLeftTal());

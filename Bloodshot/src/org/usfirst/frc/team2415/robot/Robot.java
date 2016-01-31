@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team2415.robot;
 
-import org.usfirst.frc.team2415.robot.commands.autonomous.AutoProtypeCommand;
+import org.usfirst.frc.team2415.robot.commands.autonomous.AutoPrototypeCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
-	private AutoProtypeCommand auto;
+	private AutoPrototypeCommand auto;
 	
 	//private Compressor compressor;
 
@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-    	auto = new AutoProtypeCommand();
+    	auto = new AutoPrototypeCommand();
     	auto.start();
     }
 
@@ -72,7 +72,7 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
-        
+//        System.out.println("left: " + Robot.driveSubsystem.getLeft() + ",\tright: " + Robot.driveSubsystem.getRight());
     }
 
     public void teleopInit() {

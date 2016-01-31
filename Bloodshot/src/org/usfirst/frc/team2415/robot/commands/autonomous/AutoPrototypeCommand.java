@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class AutoProtypeCommand extends CommandGroup {
+public class AutoPrototypeCommand extends CommandGroup {
     
 	double GEARING = 7.2;
 	
-    public  AutoProtypeCommand() {
+    public  AutoPrototypeCommand() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -29,7 +29,7 @@ public class AutoProtypeCommand extends CommandGroup {
 //    	addSequential(new TurnCommand(Math.PI/2, 0, (70/GEARING)*Math.PI*3.75 * .15));
 //    	addSequential(new WaitCommand(10));
 //    	System.out.println("Move 1 done");
-    	addSequential(new TravelDistCommand(12, 0, 80 * Math.PI*3.75, 160 * Math.PI*3.75));
+    	addSequential(new TravelDistCommand(12));
 //    	addSequential(new WaitCommand(10));
 //    	System.out.println("Move 2 done");
 //    	addSequential(new TurnCommand(-Math.PI/2, 0, -(70/GEARING)*Math.PI*3.75 * .15));
