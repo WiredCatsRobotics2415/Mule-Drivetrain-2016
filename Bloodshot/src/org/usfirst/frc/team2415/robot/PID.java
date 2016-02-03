@@ -1,17 +1,26 @@
 package org.usfirst.frc.team2415.robot;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public class PID {
 	double p, i, d;
 	private double lastError, elapsedTime;
-	private long lastTime;
+	private long lastTime, derrLastTime;
 	
 	private double integralError = 0;
+	
+	private boolean derrCalced = false;
+	private double lowerDB = 0;
+	private double upperDB = 0;
+	
 	
 	public PID(double p, double i, double d){
 		this.p = p;
 		this.i = i;
 		this.d = d;
-        lastTime = System.currentTimeMillis();
+		
+        lastTime = derrLastTime = System.currentTimeMillis();
 
 	}
 	
@@ -22,14 +31,22 @@ public class PID {
     	
     	double powerP = proportional(error);
     	double powerI = integral(error);
-    	double powerD = derivative(error);
-    	System.out.println(powerP + ",\t" + powerI + ",\t" + powerD);
+    	double powerD = derivative(error, time);
+//    	System.out.println(powerP + ",\t" + powerI + ",\t" + powerD);
     	
     	double out = powerP + powerI + powerD;
     	
+    	out = (out)*(1 - ((out < 0) ? lowerDB : upperDB)) + ((out < 0) ? lowerDB : upperDB);
+    	
     	lastError = error;
     	lastTime = time;
+    	
 		return out;
+	}
+	
+	public void setDeadBand(double lower, double upper){
+		this.lowerDB = lower;
+		this.upperDB = upper;
 	}
 	
 	private double proportional(double error) {
@@ -42,9 +59,11 @@ public class PID {
     	return i*integralError;
     }
     
-    private double derivative(double error) {
+    private double derivative(double error, long time) {
+
     	if(elapsedTime <= 0) return 0;
-    	double diff = error-lastError;
+    	double diff = error - lastError; 
     	return d * diff/elapsedTime;
+    	
     }
 }

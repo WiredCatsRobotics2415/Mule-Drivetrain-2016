@@ -17,8 +17,12 @@ public class TravelDistCommand extends Command {
 	boolean isDone = false;
 	
     public TravelDistCommand(double distance) {
-    	pidLeft = new PID(0.004, 0.000001, 000005);
-    	pidRight = new PID(0.004, 0.000001, 0.00005);
+    	pidLeft = new PID(0.01, 0,0.0015);//.00006,0,0);//0/*0.000001*/, 000005, 6);
+    	pidRight = new PID(0.01, 0, 0.0015);//.00006,0,0);//0/*0.000001*/, 0.00005, 6);
+    	
+    	pidLeft.setDeadBand(-0.045, 0.055);
+    	pidRight.setDeadBand(-0.045, 0.055);
+    	
     	this.distance = (distance/(2*Math.PI*WHEEL_RADIUS))*TICKS_PER_REV;
     }
 
@@ -31,16 +35,17 @@ public class TravelDistCommand extends Command {
     	leftErr =  -distance - (Robot.driveSubsystem.getLeft() - leftStart);
     	rightErr = -distance - (Robot.driveSubsystem.getRight() - rightStart);
     	
-    	if(Math.abs(leftErr) <= 5 && Math.abs(rightErr) <= 5){
-    		Robot.driveSubsystem.setMotors(0, 0);
-    		return;
-    	}
-    	
 //    	System.out.println("left: " + Robot.driveSubsystem.getLeft() + ",\tright: " + Robot.driveSubsystem.getRight());
-//    	System.out.println("left: " + leftErr + ",\tright: " + rightErr);
+    	System.out.println("left: " + leftErr + ",\tright: " + rightErr);
     	
     	double leftOut = pidLeft.pidOut(leftErr);
-    	double rightOut = pidLeft.pidOut(rightErr);
+    	double rightOut = pidRight.pidOut(rightErr);
+    	
+    	if ( leftOut > .5) leftOut = .5;    
+    	if ( leftOut < -.5) leftOut = -.5;
+    	if ( rightOut > .5) rightOut = .5;
+    	if ( rightOut < -.5) rightOut = -.5;
+
     	
     	Robot.driveSubsystem.setMotors(leftOut, -rightOut);
     }

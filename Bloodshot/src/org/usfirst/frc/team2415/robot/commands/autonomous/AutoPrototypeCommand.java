@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2415.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.PIDController;;
 
 /**
  *
@@ -29,7 +30,7 @@ public class AutoPrototypeCommand extends CommandGroup {
 //    	addSequential(new TurnCommand(Math.PI/2, 0, (70/GEARING)*Math.PI*3.75 * .15));
 //    	addSequential(new WaitCommand(10));
 //    	System.out.println("Move 1 done");
-    	addSequential(new TravelDistCommand(12));
+    	addSequential(new TravelDistCommand(60));
 //    	addSequential(new WaitCommand(10));
 //    	System.out.println("Move 2 done");
 //    	addSequential(new TurnCommand(-Math.PI/2, 0, -(70/GEARING)*Math.PI*3.75 * .15));
