@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.PIDController;;
  */
 public class AutoPrototypeCommand extends CommandGroup {
     
-	double GEARING = 7.2;
+	double F = 12;
 	
     public  AutoPrototypeCommand() {
         // Add Commands here:
@@ -27,14 +27,6 @@ public class AutoPrototypeCommand extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-//    	addSequential(new TurnCommand(Math.PI/2, 0, (70/GEARING)*Math.PI*3.75 * .15));
-//    	addSequential(new WaitCommand(10));
-//    	System.out.println("Move 1 done");
-    	addSequential(new TravelDistCommand(12));
-//    	addSequential(new WaitCommand(10));
-//    	System.out.println("Move 2 done");
-//    	addSequential(new TurnCommand(-Math.PI/2, 0, -(70/GEARING)*Math.PI*3.75 * .15));
-//    	addSequential(new WaitCommand(1));
-//    	System.out.println("Move 3 done");
+    	addSequential(new TravelDistCommand(3*F));
     }
 }

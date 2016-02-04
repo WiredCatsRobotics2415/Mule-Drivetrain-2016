@@ -36,7 +36,7 @@ public class PID {
     	
     	double out = powerP + powerI + powerD;
     	
-    	//out = (out)*(1 - ((out < 0) ? lowerDB : upperDB)) + ((out < 0) ? lowerDB : upperDB);
+    	System.out.print(out);
     	
     	if(out > 0){
     		out = (out - positiveRange[0])/(positiveRange[1] - positiveRange[0]) * 
@@ -45,6 +45,9 @@ public class PID {
     		out = (out - negativeRange[0])/(negativeRange[1] - negativeRange[0]) * 
     				(negativeRange[1] - deadbandVals[0]) + deadbandVals[0];
     	}
+    	
+
+    	System.out.println(", " + out);
     	
     	lastError = error;
     	lastTime = time;

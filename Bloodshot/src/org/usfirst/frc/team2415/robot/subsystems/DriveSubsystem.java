@@ -24,6 +24,9 @@ public class DriveSubsystem extends Subsystem {
 	private Encoder rightEncoder, leftEncoder;
 	private IMU imu;
 	
+	public static final double 	TICKS_PER_REV = 120, WHEEL_RADIUS = 2,
+								WHEEL_TRACK = 25.25;
+	
 	public DriveSubsystem(){
 		leftTalOne = new CANTalon(RobotMap.LEFT_TALON_ZERO);
 		rightTalOne = new CANTalon(RobotMap.RIGHT_TALON_ZERO);

@@ -3,6 +3,7 @@ package org.usfirst.frc.team2415.robot.commands.autonomous;
 import org.usfirst.frc.team2415.robot.MotionProfile;
 import org.usfirst.frc.team2415.robot.PID;
 import org.usfirst.frc.team2415.robot.Robot;
+import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -10,59 +11,50 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class TurnCommand extends Command {
+	private int leftStart, rightStart, leftReading, rightReading;
+	private double distance, leftErr, rightErr;
+	private PID pidLeft, pidRight;
+	boolean isDone = false;
 	
-	private MotionProfile motion;
-	private PID pid;
-	
-	private final double WHEEL_RADIUS = 0, WHEEL_TRACK = 0, ACCEL = 0;
-	private final double TOP_POWER_TO_VEL = 0.0112711, BOT_POWER_TO_VEL = 0.0109026;
-	
-	private boolean isDone = false;
-	
-	private long startTime;
-	
-	private double currVel, finalVel, vMax;
-	
-    public TurnCommand(double angle, double finalVel, double vMax) {
-    	requires(Robot.driveSubsystem);
-        this.vMax = vMax;
-        this.finalVel = finalVel;
-        this.currVel = (WHEEL_RADIUS/(2*WHEEL_TRACK))*(Robot.driveSubsystem.getRightVel() - Robot.driveSubsystem.getLeftVel()); 
-        motion = new MotionProfile(angle, currVel, finalVel, vMax, ACCEL);
-        //pid = new PID(0,0,0, false);
-        
-        startTime = System.currentTimeMillis();
+    public TurnCommand(double angle) {
+    	pidLeft = new PID(0.01, 0,0.0015);
+    	pidRight = new PID(0.01, 0, 0.0015);
+    	
+    	pidLeft.setDeadBandValues(-0.07, 0.07);
+    	pidRight.setDeadBandValues(-0.07, 0.07);
+    	
+    	pidLeft.setOutputRange(-.25, .25);
+    	pidRight.setOutputRange(-.25, .25);
+    	
+    	double radians = Math.toRadians(angle);
+    	double arcLength = (DriveSubsystem.WHEEL_TRACK/2)*radians;
+    	
+    	distance = ((arcLength)/(2*Math.PI*DriveSubsystem.WHEEL_RADIUS))*DriveSubsystem.TICKS_PER_REV;
     }
 
     protected void initialize() {
+    	Robot.driveSubsystem.releaseBrake();
+    	Robot.driveSubsystem.resetEncoders();
+    	System.out.println(distance);
     }
 
     protected void execute() {
-    	double time = (System.currentTimeMillis() - startTime)/1000.0;
+    	leftErr =  -distance - (Robot.driveSubsystem.getLeft() - leftStart);
+    	rightErr = -distance + (Robot.driveSubsystem.getRight() - rightStart);
     	
-    	if(time < motion.time1) currVel += ACCEL*time;
-    	if(time >= motion.time1 && time < motion.time2) currVel = vMax;
-    	if(time >= motion.time2 && time < motion.time3) currVel -= ACCEL*(time-motion.time2);
-    	if(time > motion.time3){
-    		currVel = finalVel;
-    		isDone = true;
-    	}
+    	System.out.println("left: " + leftErr + "\tright: " + rightErr);
     	
-    	double leftVel = -(WHEEL_TRACK/WHEEL_RADIUS)*currVel;
-    	double rightVel = (WHEEL_TRACK/WHEEL_RADIUS)*currVel;
+    	double leftOut = pidLeft.pidOut(leftErr);
+    	double rightOut = pidRight.pidOut(rightErr);
     	
-    	double leftPower = (leftVel > 0) ? TOP_POWER_TO_VEL*leftVel : BOT_POWER_TO_VEL*leftVel;
-    	double rightPower = (rightVel > 0) ? TOP_POWER_TO_VEL*rightVel : BOT_POWER_TO_VEL*rightVel;
+    	if ( leftOut > .25) leftOut = .25;    
+    	if ( leftOut < -.25) leftOut = -.25;
+    	if ( rightOut > .25) rightOut = .25;
+    	if ( rightOut < -.25) rightOut = -.25;
     	
-    	Robot.driveSubsystem.setMotors(leftPower, rightPower);
+    	if(Math.abs(leftErr)/distance < 0.02 && Math.abs(rightErr)/distance < 0.02) isDone = true;
     	
-    	double leftReading = Robot.driveSubsystem.getLeftVel();
-    	double rightReading = Robot.driveSubsystem.getRightVel();
-    	
-    	leftPower += pid.pidOut(leftVel - leftReading);
-    	rightPower += pid.pidOut(rightVel - rightReading);
-    	
-    	Robot.driveSubsystem.setMotors(leftPower, rightPower);
+    	Robot.driveSubsystem.setMotors(leftOut, rightOut);
     }
 
     protected boolean isFinished() {
@@ -70,8 +62,14 @@ public class TurnCommand extends Command {
     }
 
     protected void end() {
+    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.brake();
+    	System.out.println("Turn has ended");
     }
 
     protected void interrupted() {
+    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.brake();
+    	System.out.println("Turn was interrupted");
     }
 }
