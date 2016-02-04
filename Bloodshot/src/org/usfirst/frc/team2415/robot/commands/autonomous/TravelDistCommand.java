@@ -20,13 +20,17 @@ public class TravelDistCommand extends Command {
     	pidLeft = new PID(0.01, 0,0.0015);//.00006,0,0);//0/*0.000001*/, 000005, 6);
     	pidRight = new PID(0.01, 0, 0.0015);//.00006,0,0);//0/*0.000001*/, 0.00005, 6);
     	
-    	pidLeft.setDeadBand(-0.045, 0.055);
-    	pidRight.setDeadBand(-0.045, 0.055);
+    	pidLeft.setDeadBandValues(-0.045, 0.055);
+    	pidRight.setDeadBandValues(-0.045, 0.055);
+    	
+    	pidLeft.setOutputRange(-.5, .5);
+    	pidRight.setOutputRange(-.5, .5);
     	
     	this.distance = (distance/(2*Math.PI*WHEEL_RADIUS))*TICKS_PER_REV;
     }
 
     protected void initialize() {
+    	Robot.driveSubsystem.releaseBrake();
     	Robot.driveSubsystem.resetEncoders();
     	System.out.println(distance);
     }
@@ -45,7 +49,8 @@ public class TravelDistCommand extends Command {
     	if ( leftOut < -.5) leftOut = -.5;
     	if ( rightOut > .5) rightOut = .5;
     	if ( rightOut < -.5) rightOut = -.5;
-
+    	
+    	if(Math.abs(leftErr)/distance < 0.02 && Math.abs(rightErr)/distance < 0.02) isDone = true;
     	
     	Robot.driveSubsystem.setMotors(leftOut, -rightOut);
     }
@@ -55,16 +60,14 @@ public class TravelDistCommand extends Command {
     }
 
     protected void end() {
-    	int count = 0;
-    	for(int i=0; i<100; i++){
-			Robot.driveSubsystem.setMotors(1, -1);
-    	}
-		while(count < 100){
-			Robot.driveSubsystem.setMotors(0, 0);
-			count++;
-		}
+    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.brake();
+    	System.out.println("Drive straight has ended");
     }
 
     protected void interrupted() {
+    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.brake();
+    	System.out.println("Drive straight was interrupted");
     }
 }

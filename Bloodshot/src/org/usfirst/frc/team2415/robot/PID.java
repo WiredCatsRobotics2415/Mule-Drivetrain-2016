@@ -6,13 +6,13 @@ import java.util.Iterator;
 public class PID {
 	double p, i, d;
 	private double lastError, elapsedTime;
-	private long lastTime, derrLastTime;
+	private long lastTime;
 	
 	private double integralError = 0;
 	
-	private boolean derrCalced = false;
-	private double lowerDB = 0;
-	private double upperDB = 0;
+	private double[] 	deadbandVals = {0,0},
+						positiveRange = {0,0},
+						negativeRange = {0,0};
 	
 	
 	public PID(double p, double i, double d){
@@ -20,7 +20,7 @@ public class PID {
 		this.i = i;
 		this.d = d;
 		
-        lastTime = derrLastTime = System.currentTimeMillis();
+        lastTime = System.currentTimeMillis();
 
 	}
 	
@@ -36,7 +36,15 @@ public class PID {
     	
     	double out = powerP + powerI + powerD;
     	
-    	out = (out)*(1 - ((out < 0) ? lowerDB : upperDB)) + ((out < 0) ? lowerDB : upperDB);
+    	//out = (out)*(1 - ((out < 0) ? lowerDB : upperDB)) + ((out < 0) ? lowerDB : upperDB);
+    	
+    	if(out > 0){
+    		out = (out - positiveRange[0])/(positiveRange[1] - positiveRange[0]) * 
+    				(positiveRange[1] - deadbandVals[1]) + deadbandVals[1];
+    	}else{
+    		out = (out - negativeRange[0])/(negativeRange[1] - negativeRange[0]) * 
+    				(negativeRange[1] - deadbandVals[0]) + deadbandVals[0];
+    	}
     	
     	lastError = error;
     	lastTime = time;
@@ -44,9 +52,14 @@ public class PID {
 		return out;
 	}
 	
-	public void setDeadBand(double lower, double upper){
-		this.lowerDB = lower;
-		this.upperDB = upper;
+	public void setDeadBandValues(double negative, double positive){
+		deadbandVals[0] = negative;
+		deadbandVals[1] = positive;
+	}
+	
+	public void setOutputRange(double upper, double lower){
+		positiveRange[1] = upper;
+		negativeRange[1] = lower;
 	}
 	
 	private double proportional(double error) {

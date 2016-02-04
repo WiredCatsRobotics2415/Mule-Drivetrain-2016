@@ -90,6 +90,7 @@ public class Robot extends IterativeRobot {
     
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        System.out.printf("left: %d \t right %d \n", driveSubsystem.getLeft(), driveSubsystem.getRight());
     }
     
     public void testPeriodic() {

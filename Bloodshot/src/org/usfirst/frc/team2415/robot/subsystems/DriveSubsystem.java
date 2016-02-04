@@ -145,6 +145,19 @@ public class DriveSubsystem extends Subsystem {
     	imu.zeroYaw();
     }
     
+    
+    public void brake(){
+    	leftTalOne.enableBrakeMode(true);
+    	rightTalOne.enableBrakeMode(true);
+    	rightTalTwo.enableBrakeMode(true);
+    }
+    
+    public void releaseBrake(){
+    	leftTalOne.enableBrakeMode(false);
+    	rightTalOne.enableBrakeMode(false);
+    	rightTalTwo.enableBrakeMode(false);
+    	}
+    
     /**
      * Updates data on SmartDashboard for electronics within the Drive Subsystem
      */
