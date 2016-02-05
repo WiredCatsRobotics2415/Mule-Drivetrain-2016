@@ -36,8 +36,6 @@ public class PID {
     	
     	double out = powerP + powerI + powerD;
     	
-    	System.out.print(out);
-    	
     	if(out > 0){
     		out = (out - positiveRange[0])/(positiveRange[1] - positiveRange[0]) * 
     				(positiveRange[1] - deadbandVals[1]) + deadbandVals[1];
@@ -45,9 +43,6 @@ public class PID {
     		out = (out - negativeRange[0])/(negativeRange[1] - negativeRange[0]) * 
     				(negativeRange[1] - deadbandVals[0]) + deadbandVals[0];
     	}
-    	
-
-    	System.out.println(", " + out);
     	
     	lastError = error;
     	lastTime = time;

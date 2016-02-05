@@ -63,13 +63,13 @@ public class TravelDistCommand extends Command {
     }
 
     protected void end() {
-    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.brake();
     	System.out.println("Drive straight has ended");
     }
 
     protected void interrupted() {
-    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.brake();
     	System.out.println("Drive straight was interrupted");
     }

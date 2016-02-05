@@ -15,9 +15,11 @@ public class TurnCommand extends Command {
 	private double distance, leftErr, rightErr;
 	private PID pidLeft, pidRight;
 	boolean isDone = false;
+
+	private static final double STEADY_STATE_TOLERANCE = .05;
 	
     public TurnCommand(double angle) {
-    	pidLeft = new PID(0.01, 0,0.0015);
+    	pidLeft = new PID(0.01, 0, 0.0015);
     	pidRight = new PID(0.01, 0, 0.0015);
     	
     	pidLeft.setDeadBandValues(-0.07, 0.07);
@@ -51,8 +53,9 @@ public class TurnCommand extends Command {
     	if ( leftOut < -.25) leftOut = -.25;
     	if ( rightOut > .25) rightOut = .25;
     	if ( rightOut < -.25) rightOut = -.25;
-    	
-    	if(Math.abs(leftErr)/distance < 0.02 && Math.abs(rightErr)/distance < 0.02) isDone = true;
+
+    	if(Math.abs(leftErr)/distance < STEADY_STATE_TOLERANCE &&
+    			Math.abs(rightErr)/distance < STEADY_STATE_TOLERANCE) isDone = true;
     	
     	Robot.driveSubsystem.setMotors(leftOut, rightOut);
     }
@@ -62,13 +65,13 @@ public class TurnCommand extends Command {
     }
 
     protected void end() {
-    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.brake();
     	System.out.println("Turn has ended");
     }
 
     protected void interrupted() {
-    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.brake();
     	System.out.println("Turn was interrupted");
     }
