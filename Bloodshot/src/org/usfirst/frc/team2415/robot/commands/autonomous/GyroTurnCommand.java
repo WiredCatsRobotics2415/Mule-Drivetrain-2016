@@ -39,7 +39,6 @@ public class GyroTurnCommand extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.driveSubsystem.releaseBrake();
-    	Robot.driveSubsystem.resetYaw();
     }
     
     protected void execute() {
@@ -55,14 +54,8 @@ public class GyroTurnCommand extends Command {
     		stdError = stdError(samples);
     	}else samples.add(error);
     	
-    	if(Math.abs(error/desiredYaw) < STEADY_STATE_TOLERANCE){
-    		isDone = true;
-    		System.out.println("Gyro Auto Triggered through error quotient!");
-    	}
-    	if(Math.abs(stdError) <= STEADY_STATE_TOLERANCE && stdError != 0){
-    		isDone = true;
-    		System.out.println("Gyro Auto Triggered through standard error!");
-    	}
+    	if(Math.abs(error/desiredYaw) < STEADY_STATE_TOLERANCE) isDone = true;
+    	if(Math.abs(stdError) <= STEADY_STATE_TOLERANCE && stdError != 0) isDone = true;
     	
     	double power = pid.pidOut(error);
     	Robot.driveSubsystem.setMotors(power, power);
@@ -95,12 +88,10 @@ public class GyroTurnCommand extends Command {
     protected void end() {
     	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.brake();
-    	System.out.println("Gyro Turning ended");
     }
 
     protected void interrupted() {
     	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.brake();
-    	System.out.println("Gyro Turning was interrupted");
     }
 }

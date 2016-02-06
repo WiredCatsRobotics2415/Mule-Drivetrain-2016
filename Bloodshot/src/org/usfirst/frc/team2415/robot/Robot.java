@@ -1,7 +1,8 @@
 
 package org.usfirst.frc.team2415.robot;
 
-import org.usfirst.frc.team2415.robot.commands.autonomous.AutoScriptCommand;
+import org.usfirst.frc.team2415.robot.commands.autonomous.AdvanceAutoScriptCommand;
+import org.usfirst.frc.team2415.robot.commands.autonomous.AutoSquareCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
@@ -26,7 +27,7 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
-	private AutoScriptCommand auto;
+	private AutoSquareCommand square;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -52,8 +53,8 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-    	auto = new AutoScriptCommand();
-    	auto.start();
+    	square = new AutoSquareCommand();
+    	square.start();
     }
 
     /**
@@ -62,10 +63,7 @@ public class Robot extends IterativeRobot {
     private boolean checkedAuto = false;
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
-        if(!auto.isRunning() && !checkedAuto){
-        	System.out.println("Autonomous is finished!");
-        	checkedAuto = true;
-        }
+        
     }
 
     public void teleopInit() {
@@ -83,7 +81,6 @@ public class Robot extends IterativeRobot {
     
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        System.out.printf("left: %d \t right %d \n", driveSubsystem.getLeft(), driveSubsystem.getRight());
     }
     
     public void testPeriodic() {

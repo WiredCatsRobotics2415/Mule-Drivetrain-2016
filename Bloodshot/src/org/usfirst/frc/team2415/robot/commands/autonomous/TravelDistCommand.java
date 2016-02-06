@@ -40,8 +40,6 @@ public class TravelDistCommand extends Command {
     	leftErr =  -distance - (Robot.driveSubsystem.getLeft() - leftStart);
     	rightErr = -distance - (Robot.driveSubsystem.getRight() - rightStart);
     	
-    	System.out.println("left: " + leftErr + "\tright: " + rightErr);
-    	
     	double leftOut = pidLeft.pidOut(leftErr);
     	double rightOut = pidRight.pidOut(rightErr);
     	
@@ -53,7 +51,7 @@ public class TravelDistCommand extends Command {
     	if(Math.abs(leftErr/distance) < STEADY_STATE_TOLERANCE &&
     			Math.abs(rightErr/distance) < STEADY_STATE_TOLERANCE) isDone = true;
     	
-    	Robot.driveSubsystem.setMotors(/*(direction ? 1:-1) * */leftOut, /*(direction ? 1:-1) * */-rightOut);
+    	Robot.driveSubsystem.setMotors(leftOut, -rightOut);
     }
 
     protected boolean isFinished() {
@@ -63,12 +61,10 @@ public class TravelDistCommand extends Command {
     protected void end() {
     	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.brake();
-    	System.out.println("Drive straight has ended");
     }
 
     protected void interrupted() {
     	Robot.driveSubsystem.stop();
     	Robot.driveSubsystem.brake();
-    	System.out.println("Drive straight was interrupted");
     }
 }

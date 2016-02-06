@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj.PIDController;;
 /**
  *
  */
-public class AutoScriptCommand extends CommandGroup {
+public class SimpleAutoScriptCommand extends CommandGroup {
     
 	double F = 12;
 	
-    public  AutoScriptCommand() {
+    public  SimpleAutoScriptCommand() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
