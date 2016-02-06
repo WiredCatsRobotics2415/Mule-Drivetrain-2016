@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj.PIDController;;
 /**
  *
  */
-public class AutoPrototypeCommand extends CommandGroup {
+public class AutoScriptCommand extends CommandGroup {
     
 	double F = 12;
 	
-    public  AutoPrototypeCommand() {
+    public  AutoScriptCommand() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -27,6 +27,14 @@ public class AutoPrototypeCommand extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-    	addSequential(new GyroTurnCommand(180));
+    	addSequential(new TravelDistCommand(3*F));
+    	addSequential(new WaitCommand(1));
+    	addSequential(new GyroTurnCommand(90));
+    	addSequential(new WaitCommand(1));
+    	addSequential(new TravelDistCommand(.5*F));
+    	addSequential(new WaitCommand(1));
+    	addSequential(new GyroTurnCommand(-90));
+    	addSequential(new WaitCommand(1));
+    	addSequential(new TravelDistCommand(-2*F));
     }
 }

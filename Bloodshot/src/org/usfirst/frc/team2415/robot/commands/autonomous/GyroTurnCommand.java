@@ -55,10 +55,14 @@ public class GyroTurnCommand extends Command {
     		stdError = stdError(samples);
     	}else samples.add(error);
     	
-    	System.out.println(stdError);
-    	
-    	if(Math.abs(error)/desiredYaw < STEADY_STATE_TOLERANCE) isDone = true;
-    	if(stdError <= STEADY_STATE_TOLERANCE && stdError != 0) isDone = true;
+    	if(Math.abs(error/desiredYaw) < STEADY_STATE_TOLERANCE){
+    		isDone = true;
+    		System.out.println("Gyro Auto Triggered through error quotient!");
+    	}
+    	if(Math.abs(stdError) <= STEADY_STATE_TOLERANCE && stdError != 0){
+    		isDone = true;
+    		System.out.println("Gyro Auto Triggered through standard error!");
+    	}
     	
     	double power = pid.pidOut(error);
     	Robot.driveSubsystem.setMotors(power, power);

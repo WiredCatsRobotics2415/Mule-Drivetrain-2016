@@ -25,6 +25,7 @@ public class PID {
 	}
 	
 	public double pidOut(double error){
+		System.out.println(error);
     	long time = System.currentTimeMillis();
 		
     	elapsedTime = (time - lastTime)/1000.0;
@@ -32,9 +33,10 @@ public class PID {
     	double powerP = proportional(error);
     	double powerI = integral(error);
     	double powerD = derivative(error, time);
-//    	System.out.println(powerP + ",\t" + powerI + ",\t" + powerD);
     	
     	double out = powerP + powerI + powerD;
+    	
+    	//System.out.print(out);
     	
     	if(out > 0){
     		out = (out - positiveRange[0])/(positiveRange[1] - positiveRange[0]) * 
@@ -43,6 +45,8 @@ public class PID {
     		out = (out - negativeRange[0])/(negativeRange[1] - negativeRange[0]) * 
     				(negativeRange[1] - deadbandVals[0]) + deadbandVals[0];
     	}
+
+    	//System.out.println(",\t" + out);
     	
     	lastError = error;
     	lastTime = time;

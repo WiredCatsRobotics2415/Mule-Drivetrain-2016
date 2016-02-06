@@ -16,11 +16,8 @@ public class TravelDistCommand extends Command {
 	private PID pidLeft, pidRight;
 	boolean isDone = false;
 	private static final double STEADY_STATE_TOLERANCE = .05;
-	private boolean direction = true;
 	
     public TravelDistCommand(double distance) {
-    	
-    	direction = distance >= 0;
     	
     	pidLeft = new PID(0.01, 0,0.0015);
     	pidRight = new PID(0.01, 0, 0.0015);
@@ -31,18 +28,19 @@ public class TravelDistCommand extends Command {
     	pidLeft.setOutputRange(-.5, .5);
     	pidRight.setOutputRange(-.5, .5);
     	
-    	this.distance = Math.abs((distance/(2*Math.PI*DriveSubsystem.WHEEL_RADIUS))*DriveSubsystem.TICKS_PER_REV);
+    	this.distance = (distance/(2*Math.PI*DriveSubsystem.WHEEL_RADIUS))*DriveSubsystem.TICKS_PER_REV;
     }
 
     protected void initialize() {
     	Robot.driveSubsystem.releaseBrake();
     	Robot.driveSubsystem.resetEncoders();
-    	System.out.println(distance);
     }
 
     protected void execute() {
-    	leftErr =  -distance - (direction ? 1:-1) * (Robot.driveSubsystem.getLeft() - leftStart);
-    	rightErr = -distance - (direction ? 1:-1) * (Robot.driveSubsystem.getRight() - rightStart);
+    	leftErr =  -distance - (Robot.driveSubsystem.getLeft() - leftStart);
+    	rightErr = -distance - (Robot.driveSubsystem.getRight() - rightStart);
+    	
+    	System.out.println("left: " + leftErr + "\tright: " + rightErr);
     	
     	double leftOut = pidLeft.pidOut(leftErr);
     	double rightOut = pidRight.pidOut(rightErr);
@@ -52,10 +50,10 @@ public class TravelDistCommand extends Command {
     	if ( rightOut > .5) rightOut = .5;
     	if ( rightOut < -.5) rightOut = -.5;
     	
-    	if(Math.abs(leftErr)/distance < STEADY_STATE_TOLERANCE &&
-    			Math.abs(rightErr)/distance < STEADY_STATE_TOLERANCE) isDone = true;
+    	if(Math.abs(leftErr/distance) < STEADY_STATE_TOLERANCE &&
+    			Math.abs(rightErr/distance) < STEADY_STATE_TOLERANCE) isDone = true;
     	
-    	Robot.driveSubsystem.setMotors((direction ? 1:-1) * leftOut, (direction ? 1:-1) * -rightOut);
+    	Robot.driveSubsystem.setMotors(/*(direction ? 1:-1) * */leftOut, /*(direction ? 1:-1) * */-rightOut);
     }
 
     protected boolean isFinished() {

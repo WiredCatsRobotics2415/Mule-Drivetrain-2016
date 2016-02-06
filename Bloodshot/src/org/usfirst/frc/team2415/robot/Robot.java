@@ -1,7 +1,7 @@
 
 package org.usfirst.frc.team2415.robot;
 
-import org.usfirst.frc.team2415.robot.commands.autonomous.AutoPrototypeCommand;
+import org.usfirst.frc.team2415.robot.commands.autonomous.AutoScriptCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
@@ -26,9 +26,7 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
-	private AutoPrototypeCommand auto;
-	
-	//private Compressor compressor;
+	private AutoScriptCommand auto;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -36,17 +34,8 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
 		
-//		gamepad = new WiredCatGamepad(0);
-//		compressor = new Compressor(RobotMap.PCM_ID);
-//		//Testing testing 123
-//		SmartDashboard.putBoolean("Is Compressor On?", compressor.enabled());
-		
 		driveSubsystem = new DriveSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
-//		
-//		gyroTest = new GyroAutonomousTestCommand();
-//		
-//		gamepad.a_button.whenPressed(new GyroAutonomousTestCommand(90));
 		
 		SmartDashboard.putData(Scheduler.getInstance());
 		
@@ -63,16 +52,20 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-    	auto = new AutoPrototypeCommand();
+    	auto = new AutoScriptCommand();
     	auto.start();
     }
 
     /**
      * This function is called periodically during autonomous
      */
+    private boolean checkedAuto = false;
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
-//        System.out.println("left: " + Robot.driveSubsystem.getLeft() + ",\tright: " + Robot.driveSubsystem.getRight());
+        if(!auto.isRunning() && !checkedAuto){
+        	System.out.println("Autonomous is finished!");
+        	checkedAuto = true;
+        }
     }
 
     public void teleopInit() {
