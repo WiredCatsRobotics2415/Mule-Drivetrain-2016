@@ -11,9 +11,9 @@ public class AutoSquareCommand extends CommandGroup {
     
     public  AutoSquareCommand() {
     	Robot.driveSubsystem.resetYaw();
-    	addSequential(new AdvanceAutoScriptCommand(1,1));
-    	addSequential(new AdvanceAutoScriptCommand(-1,1));
-    	addSequential(new AdvanceAutoScriptCommand(1,1));
-    	addSequential(new AdvanceAutoScriptCommand(-1,1));
+    	addSequential(new AdvanceAutoScriptCommand(0,2));
+    	addSequential(new AdvanceAutoScriptCommand(-2,0));
+    	addSequential(new AdvanceAutoScriptCommand(0,-2));
+    	addSequential(new AdvanceAutoScriptCommand(2,0));
     }
 }

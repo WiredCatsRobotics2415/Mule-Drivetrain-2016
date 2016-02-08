@@ -34,6 +34,8 @@ public class PID {
     	double powerI = integral(error);
     	double powerD = derivative(error, time);
     	
+//    	System.out.println(powerP + "\t" + powerI + "\t" + powerD);
+    	
     	double out = powerP + powerI + powerD;
     	
     	if(out > 0){

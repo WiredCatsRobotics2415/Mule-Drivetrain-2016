@@ -27,14 +27,15 @@ public class SimpleAutoScriptCommand extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-    	addSequential(new TravelDistCommand(3*F));
-    	addSequential(new WaitCommand(1));
-    	addSequential(new GyroTurnCommand(90));
-    	addSequential(new WaitCommand(1));
-    	addSequential(new TravelDistCommand(.5*F));
-    	addSequential(new WaitCommand(1));
-    	addSequential(new GyroTurnCommand(-90));
-    	addSequential(new WaitCommand(1));
-    	addSequential(new TravelDistCommand(-2*F));
+//    	addSequential(new TravelDistCommand(3*F));
+//    	addSequential(new WaitCommand(1));
+//    	addSequential(new GyroTurnCommand(90));
+//    	addSequential(new WaitCommand(1));
+//    	addSequential(new TravelDistCommand(.5*F));
+//    	addSequential(new WaitCommand(1));
+//    	addSequential(new GyroTurnCommand(-90));
+//    	addSequential(new WaitCommand(1));
+//    	addSequential(new TravelDistCommand(-2*F));
+    	addSequential(new TurnCommand(90));
     }
 }
