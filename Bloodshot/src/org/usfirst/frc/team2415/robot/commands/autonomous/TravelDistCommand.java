@@ -22,7 +22,8 @@ public class TravelDistCommand extends Command {
 	
 	private long startTime, lastTime;
 	
-	private double distance, startLeft, startRight, currVel, finalVel, vMax, acc;
+	private double distance, startLeft, startRight, currVel, lastVel,
+					finalVel, vMax, acc, currDist;
 	
     public TravelDistCommand(double distance, double finalVel, double vMax, double acc) {
         requires(Robot.driveSubsystem);
@@ -36,6 +37,7 @@ public class TravelDistCommand extends Command {
         pid.setOutputRange(-.5, .5);
         
         this.distance = (distance/(2*DriveSubsystem.WHEEL_RADIUS*Math.PI))*DriveSubsystem.TICKS_PER_REV;
+        currDist = 0;
         
 //    	System.out.println("leftStart: " + startLeft + ",\trightStart: " + startRight);
     }
@@ -53,11 +55,21 @@ public class TravelDistCommand extends Command {
     	double timeStep = (System.currentTimeMillis() - lastTime)/1000.0,
     			runTime = (System.currentTimeMillis() - startTime)/1000.0;
     	
-    	if(runTime < motion.time1) currVel += acc*timeStep;
-    	if(runTime >= motion.time1 && runTime < motion.time2) currVel = vMax;
-    	if(runTime >= motion.time2 && runTime < motion.time3) currVel -= acc*timeStep;
+    	if(runTime < motion.time1){
+    		currVel += acc*timeStep;
+    		currDist += .5*(currVel + finalVel)*timeStep;
+    	}
+    	if(runTime >= motion.time1 && runTime < motion.time2){
+    		currVel = vMax;
+    		currDist += .5*(currVel + finalVel)*timeStep;
+    	}
+    	if(runTime >= motion.time2 && runTime < motion.time3){
+    		currVel -= acc*timeStep;
+    		currDist += .5*(currVel + finalVel)*timeStep;
+    	}
     	if(runTime >= motion.time3){
     		currVel = finalVel;
+    		currDist += .5*(currVel + finalVel)*timeStep;
     		isDone = true;
     	}
     	
@@ -69,8 +81,8 @@ public class TravelDistCommand extends Command {
     	
     	Robot.driveSubsystem.setMotors(leftPower, rightPower);
     	
-    	double leftErr = distance + (Robot.driveSubsystem.getLeft() - startLeft);
-    	double rightErr = distance + (Robot.driveSubsystem.getRight() - startRight);
+    	double leftErr = currDist + (Robot.driveSubsystem.getLeft() - startLeft);
+    	double rightErr = currDist + (Robot.driveSubsystem.getRight() - startRight);
     	
 //    	System.out.println("left: " + leftErr + "\tright: " + rightErr);
     	
@@ -84,6 +96,8 @@ public class TravelDistCommand extends Command {
     	rightPower += pidRight;
     	
     	Robot.driveSubsystem.setMotors(-leftPower, rightPower);
+    	
+    	lastVel = currVel;
     	lastTime = System.currentTimeMillis();
     }
 
