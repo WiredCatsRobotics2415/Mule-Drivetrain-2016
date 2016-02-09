@@ -27,8 +27,7 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
-	private AutoSquareCommand square;
-	private SimpleAutoScriptCommand simAuto;
+	private SimpleAutoScriptCommand auto;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -54,8 +53,8 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-    	square = new AutoSquareCommand();
-    	square.start();
+    	auto = new SimpleAutoScriptCommand();
+    	auto.start();
     }
 
     /**

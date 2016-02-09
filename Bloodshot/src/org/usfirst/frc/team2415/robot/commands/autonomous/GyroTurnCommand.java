@@ -31,7 +31,7 @@ public class GyroTurnCommand extends Command {
         pid = new PID(0.015, 0, 0.0015);
         
         pid.setDeadBandValues(-0.07, 0.07);
-        pid.setOutputRange(-.25, .25);
+        pid.setOutputRange(-.5, .5);
         
         samples = new ArrayList<Double>();
     }
