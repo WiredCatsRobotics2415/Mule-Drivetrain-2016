@@ -2,11 +2,16 @@
 package org.usfirst.frc.team2415.robot;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.usfirst.frc.team2415.robot.commands.autonomous.AutoScriptCommand;
 =======
 import org.usfirst.frc.team2415.robot.commands.autonomous.AdvanceAutoScriptCommand;
 import org.usfirst.frc.team2415.robot.commands.autonomous.AutoSquareCommand;
 >>>>>>> parent of bbf4b90... Autonomous Tested on Carpet
+=======
+import org.usfirst.frc.team2415.robot.commands.autonomous.AutoSquareCommand;
+import org.usfirst.frc.team2415.robot.commands.autonomous.SimpleAutoScriptCommand;
+>>>>>>> parent of 56c02ed... Change distance traveled in a square
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
@@ -32,10 +37,15 @@ public class Robot extends IterativeRobot {
 	public static WiredCatGamepad gamepad;
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private AutoScriptCommand auto;
 =======
 	private AutoSquareCommand square;
 >>>>>>> parent of bbf4b90... Autonomous Tested on Carpet
+=======
+	private AutoSquareCommand square;
+	private SimpleAutoScriptCommand simAuto;
+>>>>>>> parent of 56c02ed... Change distance traveled in a square
 
     /**
      * This function is run when the robot is first started up and should be
@@ -61,8 +71,8 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-    	auto = new AutoScriptCommand();
-    	auto.start();
+    	square = new AutoSquareCommand();
+    	square.start();
     }
 
     /**
