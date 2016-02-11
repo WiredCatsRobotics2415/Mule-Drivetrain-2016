@@ -25,8 +25,8 @@ public class TurnCommand extends Command {
     	pidLeft.setDeadBandValues(-0.07, 0.07);
     	pidRight.setDeadBandValues(-0.07, 0.07);
     	
-    	pidLeft.setOutputRange(-.5, .5);
-    	pidRight.setOutputRange(-.5, .5);
+    	pidLeft.setOutputRange(-.25, .25);
+    	pidRight.setOutputRange(-.25, .25);
     	
     	double radians = Math.toRadians(angle);
     	double arcLength = (DriveSubsystem.WHEEL_TRACK/2)*radians;
@@ -37,27 +37,25 @@ public class TurnCommand extends Command {
     protected void initialize() {
     	Robot.driveSubsystem.releaseBrake();
     	Robot.driveSubsystem.resetEncoders();
-    	leftStart = Robot.driveSubsystem.getLeft();
-    	rightStart = Robot.driveSubsystem.getRight();
-    	System.out.println("Turn started");
+    	System.out.println(distance);
     }
 
     protected void execute() {
     	leftErr =  -distance - (Robot.driveSubsystem.getLeft() - leftStart);
     	rightErr = -distance + (Robot.driveSubsystem.getRight() - rightStart);
     	
-    	//System.out.println("left: " + leftErr + "\tright: " + rightErr);
+    	System.out.println("left: " + leftErr + "\tright: " + rightErr);
     	
     	double leftOut = pidLeft.pidOut(leftErr);
     	double rightOut = pidRight.pidOut(rightErr);
     	
-    	if ( leftOut > .5) leftOut = .5;    
-    	if ( leftOut < -.5) leftOut = -.5;
-    	if ( rightOut > .5) rightOut = .5;
-    	if ( rightOut < -.5) rightOut = -.5;
+    	if ( leftOut > .25) leftOut = .25;    
+    	if ( leftOut < -.25) leftOut = -.25;
+    	if ( rightOut > .25) rightOut = .25;
+    	if ( rightOut < -.25) rightOut = -.25;
 
-    	if(Math.abs(leftErr/distance) < STEADY_STATE_TOLERANCE &&
-    			Math.abs(rightErr/distance) < STEADY_STATE_TOLERANCE) isDone = true;
+    	if(Math.abs(leftErr)/distance < STEADY_STATE_TOLERANCE &&
+    			Math.abs(rightErr)/distance < STEADY_STATE_TOLERANCE) isDone = true;
     	
     	Robot.driveSubsystem.setMotors(leftOut, rightOut);
     }

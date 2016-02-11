@@ -1,7 +1,12 @@
 
 package org.usfirst.frc.team2415.robot;
 
+<<<<<<< HEAD
 import org.usfirst.frc.team2415.robot.commands.autonomous.AutoScriptCommand;
+=======
+import org.usfirst.frc.team2415.robot.commands.autonomous.AdvanceAutoScriptCommand;
+import org.usfirst.frc.team2415.robot.commands.autonomous.AutoSquareCommand;
+>>>>>>> parent of bbf4b90... Autonomous Tested on Carpet
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
@@ -26,7 +31,11 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
+<<<<<<< HEAD
 	private AutoScriptCommand auto;
+=======
+	private AutoSquareCommand square;
+>>>>>>> parent of bbf4b90... Autonomous Tested on Carpet
 
     /**
      * This function is run when the robot is first started up and should be
