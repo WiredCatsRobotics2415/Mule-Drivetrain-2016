@@ -1,8 +1,7 @@
 
 package org.usfirst.frc.team2415.robot;
 
-import org.usfirst.frc.team2415.robot.commands.autonomous.AutoSquareCommand;
-import org.usfirst.frc.team2415.robot.commands.autonomous.SimpleAutoScriptCommand;
+import org.usfirst.frc.team2415.robot.commands.autonomous.AutoScriptCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
 import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
@@ -27,8 +26,7 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
-	private AutoSquareCommand square;
-	private SimpleAutoScriptCommand simAuto;
+	private AutoScriptCommand auto;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -54,8 +52,8 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-    	square = new AutoSquareCommand();
-    	square.start();
+    	auto = new AutoScriptCommand();
+    	auto.start();
     }
 
     /**
