@@ -1,10 +1,7 @@
-package org.usfirst.frc.team2415.robot;
+package org.usfirst.frc.team2415.robot.Util;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.Trigger;
 
 public class WiredCatGamepad extends Joystick{
 	

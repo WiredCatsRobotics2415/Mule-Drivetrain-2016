@@ -1,7 +1,10 @@
 package org.usfirst.frc.team2415.robot.commands.autonomous;
 
-import org.usfirst.frc.team2415.robot.PID;
+import java.util.ArrayList;
+
 import org.usfirst.frc.team2415.robot.Robot;
+import org.usfirst.frc.team2415.robot.Util.DataAnalyzer;
+import org.usfirst.frc.team2415.robot.Util.PID;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,15 +12,19 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TravelDistCommand extends Command {
+public class StraightDriveCommand extends Command {
 	
-	private int leftStart, rightStart, leftReading, rightReading;
+	private int leftStart, rightStart;
 	private double distance, leftErr, rightErr;
+	private double stdErrLeft = 0, stdErrRight = 0;
 	private PID pidLeft, pidRight;
 	boolean isDone = false;
-	private static final double STEADY_STATE_TOLERANCE = .05;
+	private static final double STEADY_STATE_TOLERANCE = .05,
+								SAMPLE_SIZE = 6;
 	
-    public TravelDistCommand(double distance) {
+	private ArrayList<Double> leftSamples, rightSamples;
+	
+    public StraightDriveCommand(double distance) {
     	
     	pidLeft = new PID(0.01, 0,0.0015);
     	pidRight = new PID(0.01, 0, 0.0015);
@@ -34,11 +41,31 @@ public class TravelDistCommand extends Command {
     protected void initialize() {
     	Robot.driveSubsystem.releaseBrake();
     	Robot.driveSubsystem.resetEncoders();
+    	leftStart = Robot.driveSubsystem.getLeft();
+    	rightStart = Robot.driveSubsystem.getRight();
     }
 
     protected void execute() {
     	leftErr =  -distance - (Robot.driveSubsystem.getLeft() - leftStart);
     	rightErr = -distance - (Robot.driveSubsystem.getRight() - rightStart);
+    	
+    	if(leftSamples.size() >= SAMPLE_SIZE){
+    		leftSamples.remove(0);
+    		leftSamples.add(leftErr);
+    		stdErrLeft = DataAnalyzer.stdError(leftSamples);
+    	}else leftSamples.add(leftErr);
+
+    	if(rightSamples.size() >= SAMPLE_SIZE){
+    		rightSamples.remove(0);
+    		rightSamples.add(rightErr);
+    		stdErrRight = DataAnalyzer.stdError(rightSamples);
+    	}else rightSamples.add(rightErr);
+    	
+    	if(Math.abs(leftErr/distance) < STEADY_STATE_TOLERANCE &&
+    			Math.abs(rightErr/distance) < STEADY_STATE_TOLERANCE) isDone = true;
+    	
+    	if(stdErrLeft <= STEADY_STATE_TOLERANCE && stdErrRight <= STEADY_STATE_TOLERANCE && 
+    			stdErrLeft != 0 && stdErrRight != 0) isDone = true;
     	
     	double leftOut = pidLeft.pidOut(leftErr);
     	double rightOut = pidRight.pidOut(rightErr);
@@ -47,9 +74,6 @@ public class TravelDistCommand extends Command {
     	if ( leftOut < -.5) leftOut = -.5;
     	if ( rightOut > .5) rightOut = .5;
     	if ( rightOut < -.5) rightOut = -.5;
-    	
-    	if(Math.abs(leftErr/distance) < STEADY_STATE_TOLERANCE &&
-    			Math.abs(rightErr/distance) < STEADY_STATE_TOLERANCE) isDone = true;
     	
     	Robot.driveSubsystem.setMotors(leftOut, -rightOut);
     }
