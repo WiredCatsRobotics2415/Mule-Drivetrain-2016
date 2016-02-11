@@ -30,7 +30,7 @@ public class SimpleAutoScriptCommand extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-    	addSequential(new TravelDistCommand(5*F, 0, 80*DriveSubsystem.WHEEL_RADIUS*Math.PI*2,
+    	addSequential(new TravelDistCommand(5*F, 0, 8*DriveSubsystem.WHEEL_RADIUS*Math.PI*2,
     										160*DriveSubsystem.WHEEL_RADIUS*Math.PI*2));
     }
 }

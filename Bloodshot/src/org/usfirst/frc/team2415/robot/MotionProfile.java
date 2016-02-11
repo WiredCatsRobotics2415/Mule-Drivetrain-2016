@@ -7,7 +7,11 @@ public class MotionProfile{
 	public MotionProfile(double displacement, double currVel, double finalVel, double vMax, double accel){
     	int dir = displacement > 0 ? 1:-1;
     	
-    	time1 = (dir*vMax - currVel)/(accel);
+    	double num = (dir*vMax - currVel);
+    	double nom = (accel);
+    	//System.out.println("numerator: " + num + "\tdenominator: " + nom);
+    	
+    	time1 = num/nom;
     	double timef_2 = (dir*vMax - finalVel)/(accel);
     	
     	double dist1 = time1*currVel + .5*dir*accel*Math.pow(time1, 2);

@@ -22,7 +22,7 @@ public class TravelDistCommand extends Command {
 	
 	private long startTime, lastTime;
 	
-	private double distance, startLeft, startRight, currVel, lastVel,
+	private double distance, startLeft, startRight, currVel,
 					finalVel, vMax, acc, currDist;
 	
     public TravelDistCommand(double distance, double finalVel, double vMax, double acc) {
@@ -31,7 +31,7 @@ public class TravelDistCommand extends Command {
         this.finalVel = (finalVel/(2*DriveSubsystem.WHEEL_RADIUS*Math.PI))*DriveSubsystem.TICKS_PER_REV;
         this.currVel = 0;//(WHEEL_RADIUS/2)*(Robot.driveSubsystem.getLeftVel()*(1/120.) + Robot.driveSubsystem.getRightVel()*(1/120.)); 
         this.acc = (acc/(2*DriveSubsystem.WHEEL_RADIUS*Math.PI))*DriveSubsystem.TICKS_PER_REV;
-        pid = new PID(0.015, 0, 0.0015);
+        pid = new PID(0.5, .05, 0);
         
         pid.setDeadBandValues(-0.07, 0.07);
         pid.setOutputRange(-.5, .5);
@@ -43,12 +43,13 @@ public class TravelDistCommand extends Command {
     }
 
     protected void initialize() {
+    	Robot.driveSubsystem.releaseBrake();
     	startTime = lastTime = System.currentTimeMillis();
         Robot.driveSubsystem.resetEncoders();
         startLeft = Robot.driveSubsystem.getLeft();
         startRight = Robot.driveSubsystem.getRight();
         motion = new MotionProfile(distance, currVel, finalVel, vMax, acc);
-        System.out.println(motion.time1 + "\t" + motion.time2 + "\t" + motion.time3);
+//        System.out.println(motion.time1 + "\t" + motion.time2 + "\t" + motion.time3);
     }
 
     protected void execute() {
@@ -57,20 +58,24 @@ public class TravelDistCommand extends Command {
     	
     	if(runTime < motion.time1){
     		currVel += acc*timeStep;
-    		currDist += .5*(currVel + finalVel)*timeStep;
+    		currDist += currVel*timeStep;
+    		System.out.println("Acc");
     	}
     	if(runTime >= motion.time1 && runTime < motion.time2){
     		currVel = vMax;
-    		currDist += .5*(currVel + finalVel)*timeStep;
+    		currDist += currVel*timeStep;
+    		System.out.println("cv");
     	}
     	if(runTime >= motion.time2 && runTime < motion.time3){
     		currVel -= acc*timeStep;
-    		currDist += .5*(currVel + finalVel)*timeStep;
+    		currDist += currVel*timeStep;
+    		System.out.println("Decc");
     	}
     	if(runTime >= motion.time3){
     		currVel = finalVel;
-    		currDist += .5*(currVel + finalVel)*timeStep;
+    		currDist += currVel*timeStep;
     		isDone = true;
+    		System.out.println("stop");
     	}
     	
     	double leftVel = (1/DriveSubsystem.WHEEL_RADIUS)*(currVel/DriveSubsystem.TICKS_PER_REV);
@@ -79,25 +84,30 @@ public class TravelDistCommand extends Command {
     	double leftPower = (leftVel > 0) ? TOP_POWER_TO_VEL*leftVel : BOT_POWER_TO_VEL*leftVel;
     	double rightPower = (rightVel > 0) ? TOP_POWER_TO_VEL*rightVel : BOT_POWER_TO_VEL*rightVel;
     	
-    	Robot.driveSubsystem.setMotors(leftPower, rightPower);
+    	Robot.driveSubsystem.setMotors(-leftPower, rightPower);
     	
     	double leftErr = currDist + (Robot.driveSubsystem.getLeft() - startLeft);
     	double rightErr = currDist + (Robot.driveSubsystem.getRight() - startRight);
     	
-//    	System.out.println("left: " + leftErr + "\tright: " + rightErr);
+//    	System.out.println("left err: " + leftErr + "\tright err: " + rightErr);
+    	
+//    	System.out.println("currDist: " + currDist + "\tcurrVel: " + currVel + "\ttimeStep: " + timeStep);
     	
     	leftPower *= MOTOR_LOAD;	
     	rightPower *= MOTOR_LOAD;
     	
     	double pidLeft = pid.pidOut(leftErr);
     	double pidRight = pid.pidOut(rightErr);
+//    	System.out.println("left pow pid: " + pidLeft + "\tright pow pid: " + pidRight);
+
     	
     	leftPower += pidLeft;
     	rightPower += pidRight;
     	
+//    	System.out.println("left pow final: " + leftPower + "\tright pow final: " + rightPower);
+    	
     	Robot.driveSubsystem.setMotors(-leftPower, rightPower);
     	
-    	lastVel = currVel;
     	lastTime = System.currentTimeMillis();
     }
 
@@ -114,6 +124,9 @@ public class TravelDistCommand extends Command {
 //			Robot.driveSubsystem.setMotors(0, 0);
 //			count++;
 //		}
+    	Robot.driveSubsystem.setMotors(0, 0);
+    	Robot.driveSubsystem.brake();
+        System.out.println("Move Done");
     }
 
     protected void interrupted() {
