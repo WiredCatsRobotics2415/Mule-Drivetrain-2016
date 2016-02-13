@@ -36,6 +36,8 @@ public class StraightDriveCommand extends Command {
     	pidRight.setOutputRange(-.5, .5);
     	
     	this.distance = (distance/(2*Math.PI*DriveSubsystem.WHEEL_RADIUS))*DriveSubsystem.TICKS_PER_REV;
+    	
+    	leftSamples = rightSamples = new ArrayList<Double>();
     }
 
     protected void initialize() {

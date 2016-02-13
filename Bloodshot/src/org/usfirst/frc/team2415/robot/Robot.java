@@ -2,11 +2,8 @@
 package org.usfirst.frc.team2415.robot;
 
 import org.usfirst.frc.team2415.robot.Util.WiredCatGamepad;
-import org.usfirst.frc.team2415.robot.commands.autonomous.AutoScriptCommand;
-import org.usfirst.frc.team2415.robot.resetcommands.ResetEncodersCommand;
-import org.usfirst.frc.team2415.robot.resetcommands.ResetYawCommand;
+import org.usfirst.frc.team2415.robot.commands.autonomous.MoveCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
-import org.usfirst.frc.team2415.robot.subsystems.IntakeSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -26,12 +23,14 @@ public class Robot extends IterativeRobot {
 	
 	public static WiredCatGamepad gamepad;
 	
-	private AutoScriptCommand auto;
+//	private AutoScriptCommand auto;
+//	private TurnCommand auto;
+	private MoveCommand auto;
 	
     public void robotInit() {
 		
 		driveSubsystem = new DriveSubsystem();
-		
+		gamepad = new WiredCatGamepad(0);
 		SmartDashboard.putData(Scheduler.getInstance());
     }
 	
@@ -41,12 +40,11 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-    	auto = new AutoScriptCommand();
+    	auto = new MoveCommand(2,10);
     	auto.start();
     }
     
     public void autonomousPeriodic() {
-        Scheduler.getInstance().run(); 
     }
 
     public void teleopInit() {}

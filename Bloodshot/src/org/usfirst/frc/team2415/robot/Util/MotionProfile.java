@@ -1,4 +1,4 @@
-package org.usfirst.frc.team2415.robot;
+package org.usfirst.frc.team2415.robot.Util;
 
 public class MotionProfile{
 	

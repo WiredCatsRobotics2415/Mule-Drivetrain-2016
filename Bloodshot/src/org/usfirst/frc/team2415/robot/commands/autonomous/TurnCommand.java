@@ -28,7 +28,7 @@ public class TurnCommand extends Command {
     public TurnCommand(double desiredYaw) {
         requires(Robot.driveSubsystem);
         this.desiredYaw = desiredYaw;
-        pid = new PID(0.015, 0, 0.0015);
+        pid = new PID(0.015, 0.0015, 0.0015);
         
         pid.setDeadBandValues(-0.07, 0.07);
         pid.setOutputRange(-.25, .25);
@@ -54,7 +54,7 @@ public class TurnCommand extends Command {
     		stdError = DataAnalyzer.stdError(samples);
     	}else samples.add(error);
     	
-    	if(Math.abs(error/desiredYaw) < STEADY_STATE_TOLERANCE) isDone = true;
+    	//if(Math.abs(error/desiredYaw) < STEADY_STATE_TOLERANCE) isDone = true;
     	if(stdError <= STEADY_STATE_TOLERANCE && stdError != 0) isDone = true;
     	
     	double power = pid.pidOut(error);

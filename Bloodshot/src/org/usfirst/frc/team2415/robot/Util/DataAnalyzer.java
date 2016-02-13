@@ -24,4 +24,6 @@ public class DataAnalyzer {
     public static double stdError(ArrayList<Double> vals){
     	return stdDeviation(vals)/Math.sqrt(vals.size());
     }
+    
+    
 }

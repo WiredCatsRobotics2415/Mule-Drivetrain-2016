@@ -17,6 +17,8 @@ public class DriveSubsystem extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	
+	public static double a, b, c, d;
+	
 	private final int BAUD_RATE = 57600;
 	private final byte REFRESH_RATE = 50;
 	
@@ -45,7 +47,7 @@ public class DriveSubsystem extends Subsystem {
 	}
 	
     public void initDefaultCommand() {
-    	setDefaultCommand(new ArcadeDriveCommand());
+    	//setDefaultCommand(new ArcadeDriveCommand());
     }
     
     /**
