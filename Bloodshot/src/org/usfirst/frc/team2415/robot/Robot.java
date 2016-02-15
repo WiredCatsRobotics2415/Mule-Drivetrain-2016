@@ -28,10 +28,11 @@ public class Robot extends IterativeRobot {
 	private MoveCommand auto;
 	
     public void robotInit() {
-		
+		System.out.println("Robot Starting");
 		driveSubsystem = new DriveSubsystem();
 		gamepad = new WiredCatGamepad(0);
 		SmartDashboard.putData(Scheduler.getInstance());
+		System.out.println("Robot finished starting");
     }
 	
 	public void disabledPeriodic() {
@@ -40,8 +41,11 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
+    	System.out.println("Creating Auto");
     	auto = new MoveCommand(2,10);
+    	System.out.println("Auto created");
     	auto.start();
+    	System.out.println("Auto started");
     }
     
     public void autonomousPeriodic() {
