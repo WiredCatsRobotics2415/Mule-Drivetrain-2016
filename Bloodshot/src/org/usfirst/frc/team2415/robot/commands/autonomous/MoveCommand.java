@@ -15,7 +15,6 @@ public class MoveCommand extends CommandGroup {
     	this.y = y*F;
     	distance = Math.sqrt(this.x*this.x + this.y*this.y);
     	thetaT = -Math.toDegrees(Math.atan2(this.x, this.y));
-    	System.out.println(thetaT);
     	
     	addSequential(new TurnCommand(thetaT));
     	addSequential(new StraightDriveCommand(distance));

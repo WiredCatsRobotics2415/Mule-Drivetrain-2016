@@ -19,7 +19,7 @@ public class InterpolatedMoveCommand extends CommandGroup {
     		xTotal += currX-lastX;
     		yTotal += currY-lastY;
     		System.out.println("xChange: " + (currX-lastX) + ",\tyChange:" + (currY-lastY));
-    		lastX = currX;
+    		lastX = currX; 
     		lastY = currY;
     	}
     	System.out.println("xTotal: " + xTotal + "\tyTotal: " + yTotal);

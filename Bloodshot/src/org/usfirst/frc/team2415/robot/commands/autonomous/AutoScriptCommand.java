@@ -11,9 +11,15 @@ public class AutoScriptCommand extends CommandGroup {
     
     public  AutoScriptCommand() {
     	Robot.driveSubsystem.resetYaw();
-    	addSequential(new MoveCommand(10, 2));
-    	addSequential(new MoveCommand(-7, 4));
-    	addSequential(new MoveCommand(9, 3));
-    	addSequential(new MoveCommand(-12, -9));
+    	addSequential(new TurnCommand(90));
+    	addSequential(new WaitCommand(1));
+    	
+    	addSequential(new TurnCommand(-90));
+    	addSequential(new WaitCommand(1));
+    	
+    	addSequential(new TurnCommand(45));
+    	addSequential(new WaitCommand(1));
+    	
+    	addSequential(new TurnCommand(-45));
     }
 }

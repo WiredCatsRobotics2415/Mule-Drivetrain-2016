@@ -28,10 +28,10 @@ public class TurnCommand extends Command {
     public TurnCommand(double desiredYaw) {
         requires(Robot.driveSubsystem);
         this.desiredYaw = desiredYaw;
-        pid = new PID(0.015, 0, 0.0015);
+        pid = new PID(0.01, 0.01, 0.0015);
         
-        pid.setDeadBandValues(-0.07, 0.07);
-        pid.setOutputRange(-.25, .25);
+        pid.setDeadBandValues(-0.045, 0.055);
+        pid.setOutputRange(-.5, .5);
         
         samples = new ArrayList<Double>();
     }
@@ -39,6 +39,7 @@ public class TurnCommand extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.driveSubsystem.releaseBrake();
+    	System.out.println(desiredYaw);
     }
     
     protected void execute() {
@@ -57,7 +58,12 @@ public class TurnCommand extends Command {
     	if(Math.abs(error/desiredYaw) < STEADY_STATE_TOLERANCE) isDone = true;
     	if(stdError <= STEADY_STATE_TOLERANCE && stdError != 0) isDone = true;
     	
+    	
     	double power = pid.pidOut(error);
+    	if(Math.abs(power) > .5) power = ((power > 0) ? 1:-1) * .5;
+    	
+    	System.out.println(power);
+    	
     	Robot.driveSubsystem.setMotors(power, power);
     }
     

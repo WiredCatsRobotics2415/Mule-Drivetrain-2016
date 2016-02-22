@@ -2,6 +2,7 @@
 package org.usfirst.frc.team2415.robot;
 
 import org.usfirst.frc.team2415.robot.Util.WiredCatGamepad;
+import org.usfirst.frc.team2415.robot.commands.autonomous.AutoScriptCommand;
 import org.usfirst.frc.team2415.robot.commands.autonomous.MoveCommand;
 import org.usfirst.frc.team2415.robot.subsystems.DriveSubsystem;
 
@@ -38,7 +39,8 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-    	auto = new MoveCommand(5, 0);
+    	Robot.driveSubsystem.resetYaw();
+    	auto = new MoveCommand(2,2);
     	auto.start();
     }
     
@@ -46,7 +48,9 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run(); 
     }
 
-    public void teleopInit() {}
+    public void teleopInit() {
+    	driveSubsystem.resetYaw();
+    }
 
     public void disabledInit(){}
     

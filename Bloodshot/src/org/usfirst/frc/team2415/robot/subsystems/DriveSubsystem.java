@@ -18,7 +18,7 @@ public class DriveSubsystem extends Subsystem {
     // here. Call these from Commands.
 	
 	//for cubic pathing interpolation
-	public static final double A = -0.02, B = 0.3, C = 0, D = 0;
+	public static final double A = -0.08, B = 0.6, C = 0, D = 0;
 	
 	private final int BAUD_RATE = 57600;
 	private final byte REFRESH_RATE = 50;
@@ -124,7 +124,7 @@ public class DriveSubsystem extends Subsystem {
      * @return returns the current yaw value between -180 and 180 degrees
      */
     public double getYaw(){
-    	return imu.getYaw();
+    	return -imu.getYaw();
     }
     
     /**
